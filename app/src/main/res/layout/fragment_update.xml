@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.add.AddFragment">
+    tools:context=".fragments.update.UpdateFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
-                    tools:text="abc"/>
+                    tools:text=""/>
             </LinearLayout>
 
             <LinearLayout
@@ -117,18 +117,93 @@
                     tools:text="abc"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/layout_remaining_volume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_delivered_volume"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="Khối lượng còn lại:" />
+
+                <TextView
+                    android:id="@+id/remaining_volume_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    tools:text="abc"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_unit_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_remaining_volume"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="Đơn giá:" />
+
+                <TextView
+                    android:id="@+id/unit_price_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    tools:text="abc"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_amout_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:layout_constraintTop_toBottomOf="@id/layout_unit_price"
+                app:layout_constraintStart_toStartOf="parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:text="Số tiền phải trả:" />
+
+                <TextView
+                    android:id="@+id/amout_pay_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    tools:text="abc"/>
+            </LinearLayout>
+
             <Button
-                android:id="@+id/btn_add"
+                android:id="@+id/btn_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                app:layout_constraintTop_toBottomOf="@id/layout_delivered_volume"
+                app:layout_constraintTop_toBottomOf="@id/layout_amout_pay"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:gravity="center"
                 android:paddingStart="24dp"
                 android:paddingEnd="24dp"
-                android:text="Thêm"
+                android:text="Cập nhật"
                 android:textSize="24sp"/>
 
 

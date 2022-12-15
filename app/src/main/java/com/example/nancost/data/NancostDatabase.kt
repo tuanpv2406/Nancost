@@ -1,38 +1,26 @@
 package com.example.nancost.data
 
 import android.content.Context
+import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.nancost.model.Nancost
 
+@Database(entities = [Nancost::class], version = 1, exportSchema = false)
 abstract class NancostDatabase : RoomDatabase() {
     abstract fun nancostDao(): NancostDao
 
-    companion object{
-        @Volatile
-        private var INSTANCE: NancostDatabase? = null
+    companion object {
+        const val VERSION_DATABASE = 4
+        private const val DATABASE_NAME = "nancost"
 
-        fun getDatabase(context: Context): NancostDatabase {
-            val tempInstance = INSTANCE
-
-//            check if there is any existing instance is present for our room database
-//            if there exist an existing instance then we'll return that instance
-            if (tempInstance != null) {
-                return tempInstance
-            }
-
-//            If there is no any instance present for our database then we'll create a new instance
-//            WHY SYNCHRONIZED ?? --> Because everything inside the synchronized block will be protected
-//            by concurrent execution on multiple threads
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    NancostDatabase::class.java,
-                    "user_database"
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
-
-        }
+        fun getInstance(context: Context): NancostDatabase =
+            Room.databaseBuilder(
+                context,
+                NancostDatabase::class.java,
+                DATABASE_NAME
+            )
+                .fallbackToDestructiveMigration()
+                .build()
     }
 }

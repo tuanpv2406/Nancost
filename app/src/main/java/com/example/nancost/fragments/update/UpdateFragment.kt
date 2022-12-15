@@ -1,8 +1,5 @@
-package `in`.gsrathoreniks.room.fragments.update
+package com.example.nancost.fragments.update
 
-import `in`.gsrathoreniks.room.R
-import `in`.gsrathoreniks.room.model.User
-import `in`.gsrathoreniks.room.viewmodel.UserViewModel
 import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
@@ -13,85 +10,121 @@ import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_update.*
-import kotlinx.android.synthetic.main.fragment_update.view.*
-
+import com.example.nancost.NancostApplication
+import com.example.nancost.R
+import com.example.nancost.databinding.FragmentUpdateBinding
+import com.example.nancost.model.Nancost
+import com.example.nancost.viewmodel.NancostViewModel
+import com.example.nancost.viewmodel.NancostViewModelFactory
 
 class UpdateFragment : Fragment() {
 
     private val args by navArgs<UpdateFragmentArgs>()
 
-    private lateinit var mUserViewModel: UserViewModel
+    private var _binding: FragmentUpdateBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var viewModel: NancostViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_update, container, false)
+    ): View {
+        _binding = FragmentUpdateBinding.inflate(inflater, container, false)
+        val view = binding.root
 
-        mUserViewModel = ViewModelProvider(this).get(UserViewModel::class.java)
+        viewModel = ViewModelProvider(this, NancostViewModelFactory(
+            (requireActivity().application as NancostApplication).repository)
+        )[NancostViewModel::class.java]
 
-        view.update_first_name.setText(args.currentUser.firstName)
-        view.update_last_name.setText(args.currentUser.lastName)
-        view.update_age.setText(args.currentUser.age.toString())
+        binding.nameContent.setText(args.currentNancost.nancostName)
+        binding.receivedVolumeContent.setText(args.currentNancost.receivedVolume.toString())
+        binding.deliveredLeavesContent.setText(args.currentNancost.deliveredLeaves.toString())
+        binding.deliveredVolumeContent.setText(args.currentNancost.deliveredVolume.toString())
 
-        view.update_btnAdd.setOnClickListener {
+
+        binding.btnUpdate.setOnClickListener {
             updateItem()
         }
 
-//        Add menu to the fragment
         setHasOptionsMenu(true)
 
         return view
     }
 
-    private fun updateItem(){
-        val firstName = update_first_name.text.toString()
-        val lastName = update_last_name.text.toString()
-        val age = Integer.parseInt(update_age.text.toString())
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.remainingVolumeContent.text = args.currentNancost.getRemainingVolume().toString()
+        binding.unitPriceContent.text = args.currentNancost.unitPrice.toString()
+        binding.amoutPayContent.text = args.currentNancost.getAmountPay().toString()
+    }
 
-        if(inputCheck(firstName,lastName,update_age.text)){
-//            Create User Object
-            val updatedUser =  User(args.currentUser.id,firstName, lastName, age)
+    private fun updateItem() {
+        val nameContent = binding.nameContent.text.toString()
+        val receivedVolumeContent = binding.receivedVolumeContent.text
+        val deliveredLeavesContent = binding.deliveredLeavesContent.text
+        val deliveredVolumeContent = binding.deliveredVolumeContent.text
 
-//            Update User Object
-            mUserViewModel.updateUser(updatedUser)
-            Toast.makeText(requireContext(),"Updated successfully",Toast.LENGTH_LONG).show()
+        if (inputCheck(
+                nameContent,
+                receivedVolumeContent,
+                deliveredLeavesContent,
+                deliveredVolumeContent
+            )
+        ) {
+            val updateNancost = Nancost(
+                args.currentNancost.id,
+                nameContent,
+                receivedVolumeContent.toString().toDouble(),
+                deliveredLeavesContent.toString().toInt(),
+                deliveredVolumeContent.toString().toDouble()
+            )
 
-//            Navigate back to list after updating data
+            viewModel.updateNancost(updateNancost)
+            Toast.makeText(requireContext(), "Cập nhật thành công!", Toast.LENGTH_LONG).show()
+
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-        }else{
-            Toast.makeText(requireContext(),"Please fill out all fields..",Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(requireContext(), "Hãy điền hết tất cả các trường...", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
-    private fun inputCheck(firstName: String,lastName: String, age: Editable): Boolean{
-        return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    private fun inputCheck(
+        name: String,
+        receivedVolume: Editable,
+        deliveredLeaves: Editable,
+        deliveredVolume: Editable
+    ): Boolean {
+        return !(TextUtils.isEmpty(name) && receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu,menu)
+        inflater.inflate(R.menu.menu, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId == R.id.delete){
-            deleteUser()
+        if (item.itemId == R.id.delete) {
+            deleteNancost()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun deleteUser(){
+    private fun deleteNancost() {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Yes"){_,_->
-            mUserViewModel.deleteUser(args.currentUser)
-            Toast.makeText(requireContext(),"Deleted: ${args.currentUser.firstName}",Toast.LENGTH_SHORT).show()
+        builder.setPositiveButton("Có") { _, _ ->
+            viewModel.deleteNancost(args.currentNancost.id)
+            Toast.makeText(
+                requireContext(),
+                "Đã xóa: ${args.currentNancost.nancostName}",
+                Toast.LENGTH_SHORT
+            ).show()
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         }
-        builder.setNegativeButton("No"){_,_-> }
-        builder.setTitle("Delete ${args.currentUser.firstName}?")
-        builder.setMessage("Are you sure you want to delete ${args.currentUser.firstName}?")
+        builder.setNegativeButton("Không") { _, _ -> }
+        builder.setTitle("Xóa ${args.currentNancost.nancostName}?")
+        builder.setMessage("Bạn đã chắc chắn xóa ${args.currentNancost.nancostName} chưa?")
         builder.create().show()
     }
 

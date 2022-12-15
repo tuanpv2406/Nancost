@@ -1,39 +1,29 @@
 package com.example.nancost.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.nancost.data.NancostDatabase
 import com.example.nancost.data.repository.NancostRepository
 import com.example.nancost.model.Nancost
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 
-class NancostViewModel(application: Application): AndroidViewModel(application) {
+class NancostViewModel(private val repository: NancostRepository) : ViewModel() {
 
-    val readAllData: LiveData<ArrayList<Nancost>>
-    private val repository: NancostRepository
-
-    init {
-        val nancostDao = NancostDatabase.getDatabase(application).nancostDao()
-        repository = NancostRepository(nancostDao)
-        readAllData = repository.readAllData
-    }
-    fun getAll() {
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.getAll()
-        }
-    }
+    val allNancost: LiveData<List<Nancost>> = repository.readAllData
 
     fun addNancost(nancost: Nancost) {
         viewModelScope.launch(Dispatchers.IO) {
+            nancost.getRemainingVolume()
+            nancost.getAmountPay()
             repository.add(nancost)
         }
     }
 
     fun updateNancost(nancost: Nancost) {
         viewModelScope.launch(Dispatchers.IO) {
+            nancost.getRemainingVolume()
+            nancost.getAmountPay()
             repository.update(nancost)
         }
     }
@@ -41,6 +31,17 @@ class NancostViewModel(application: Application): AndroidViewModel(application) 
     fun deleteNancost(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.delete(id)
+        }
+    }
+}
+
+class NancostViewModelFactory constructor(private val repository: NancostRepository): ViewModelProvider.Factory {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return if (modelClass.isAssignableFrom(NancostViewModel::class.java)) {
+            NancostViewModel(this.repository) as T
+        } else {
+            throw IllegalArgumentException("ViewModel Not Found")
         }
     }
 }

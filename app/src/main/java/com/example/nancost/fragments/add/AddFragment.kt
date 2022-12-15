@@ -12,55 +12,60 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.nancost.NancostApplication
 import com.example.nancost.R
+import com.example.nancost.databinding.FragmentAddBinding
+import com.example.nancost.databinding.FragmentListBinding
+import com.example.nancost.model.Nancost
 import com.example.nancost.viewmodel.NancostViewModel
+import com.example.nancost.viewmodel.NancostViewModelFactory
 
 
 class AddFragment : Fragment() {
 
     private lateinit var viewModel: NancostViewModel
-    private lateinit var name: EditText
-    private lateinit var receivedVolume: EditText
-    private lateinit var deliveredLeaves: EditText
-    private lateinit var deliveredVolume: EditText
-    private lateinit var btnAdd: Button
+    private var _binding: FragmentAddBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_add, container, false)
-        name = view.findViewById(R.id.name_content)
-        receivedVolume = view.findViewById(R.id.received_volume_content)
-        deliveredLeaves = view.findViewById(R.id.delivered_leaves_content)
-        deliveredVolume = view.findViewById(R.id.delivered_volume_content)
-
-        viewModel = ViewModelProvider(this)[NancostViewModel::class.java]
-        btnAdd.setOnClickListener {
+        _binding = FragmentAddBinding.inflate(inflater, container, false)
+        val view = binding.root
+        viewModel = ViewModelProvider(this, NancostViewModelFactory(
+            (requireActivity().application as NancostApplication).repository)
+        )[NancostViewModel::class.java]
+        binding.btnAdd.setOnClickListener {
             insertDataToDatabase()
         }
 
         return view
     }
 
-    private fun insertDataToDatabase(){
-        val nameContent = name.text.toString()
-        val receivedVolumeContent = receivedVolume.text
-        val deliveredVolumeContent = deliveredVolume.text
+    private fun insertDataToDatabase() {
+        val nameContent = binding.nameContent.text.toString()
+        val receivedVolumeContent = binding.receivedVolumeContent.text
+        val deliveredLeavesContent = binding.deliveredLeavesContent.text
+        val deliveredVolumeContent = binding.deliveredVolumeContent.text
 
-        if(inputCheck(fName,lName, ag)){
-//            Create User object
-        val user = User(0,fName,lName,Integer.parseInt(ag.toString()))
-//            Add data to Database
-            viewModel.addUser(user)
-            Toast.makeText(context,"Successfully added",Toast.LENGTH_LONG).show()
-//            findNavController().navigate(R.id.action_addFragment_to_listFragment)
+        if (inputCheck(nameContent, receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent)) {
+            val nancost = Nancost(
+                0,
+                nameContent,
+                receivedVolumeContent.toString().toDouble(),
+                deliveredLeavesContent.toString().toInt(),
+                deliveredVolumeContent.toString().toDouble()
+            )
+            viewModel.addNancost(nancost)
+            Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
+            findNavController().navigate(R.id.action_addFragment_to_listFragment)
         }
     }
 
-    private fun inputCheck(firstName: String,lastName: String, age: Editable): Boolean{
-        return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
+    private fun inputCheck(name: String, receivedVolume: Editable, deliveredLeaves: Editable, deliveredVolume: Editable): Boolean {
+        return !(TextUtils.isEmpty(name) && receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
     }
 
 }

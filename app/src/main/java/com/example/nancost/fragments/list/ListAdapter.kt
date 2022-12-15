@@ -1,44 +1,44 @@
-package `in`.gsrathoreniks.room.fragments.list
+package com.example.nancost.fragments.list
 
-import `in`.gsrathoreniks.room.R
-import `in`.gsrathoreniks.room.model.User
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.row_item.view.*
+import com.example.nancost.R
+import com.example.nancost.databinding.RowItemBinding
+import com.example.nancost.model.Nancost
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
-    private var userList = emptyList<User>()
+    private var nancostList = emptyList<Nancost>()
 
-    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    }
+    inner class MyViewHolder(val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-       return MyViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.row_item,parent,false))
+        val binding = RowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return MyViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return nancostList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-       val currentItem = userList[position]
-        holder.itemView.tv.text = currentItem.id.toString()
-        holder.itemView.firstname.text = currentItem.firstName
-        holder.itemView.lastname.text = currentItem.lastName
-        holder.itemView.age.text = currentItem.age.toString()
+       val currentItem = nancostList[position]
+        with(holder) {
+            binding.tv.text = currentItem.id.toString()
+            binding.name.text = currentItem.nancostName
 
-        holder.itemView.rowLayout.setOnClickListener{
-            val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
-            holder.itemView.findNavController().navigate(action)
+            binding.rowLayout.setOnClickListener{
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
+                holder.itemView.findNavController().navigate(action)
+            }
         }
     }
-    fun setData(user: List<User>){
-        this.userList = user
+    fun setData(nancostList: List<Nancost>){
+        this.nancostList = nancostList
         notifyDataSetChanged()
 
     }
