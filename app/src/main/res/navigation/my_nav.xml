@@ -14,13 +14,13 @@
             android:id="@+id/action_listFragment_to_addFragment"
             app:destination="@id/addFragment" />
         <action
-            android:id="@+id/action_listFragment_to_updateFragment"
-            app:destination="@id/updateFragment" />
+            android:id="@+id/action_listFragment_to_dateUpdateFragment"
+            app:destination="@id/dateUpdateFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.nancost.fragments.add.AddFragment"
-        android:label="Thêm"
+        android:label="Thêm người mới"
         tools:layout="@layout/fragment_add" >
         <action
             android:id="@+id/action_addFragment_to_listFragment"
@@ -35,6 +35,41 @@
             app:destination="@id/listFragment" />
         <argument
             android:name="currentNancost"
-            app:argType="com.example.nancost.model.Nancost" />
+            app:argType="com.example.nancost.model.NancostData"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+    <fragment
+        android:id="@+id/dateUpdateFragment"
+        android:name="com.example.nancost.fragments.update.DateUpdateFragment"
+        android:label="Danh sách ngày" >
+        <action
+            android:id="@+id/action_dateUpdateFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_dateUpdateFragment_to_updateFragment"
+            app:destination="@id/updateFragment" />
+        <action
+            android:id="@+id/action_dateUpdateFragment_to_dateAddFragment"
+            app:destination="@id/dateAddFragment" />
+        <argument
+            android:name="currentNancost"
+            app:argType="com.example.nancost.model.Nancost"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+    <fragment
+        android:id="@+id/dateAddFragment"
+        android:name="com.example.nancost.fragments.update.DateAddFragment"
+        android:label="Thêm bản ghi"
+        tools:layout="@layout/fragment_date_add" >
+        <action
+            android:id="@+id/action_dateAddFragment_to_dateUpdateFragment"
+            app:destination="@id/dateUpdateFragment" />
+        <argument
+            android:name="currentNancost"
+            app:argType="com.example.nancost.model.Nancost"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
 </navigation>

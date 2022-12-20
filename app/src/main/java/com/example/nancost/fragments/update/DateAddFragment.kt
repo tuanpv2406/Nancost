@@ -1,8 +1,7 @@
-package com.example.nancost.fragments.add
+package com.example.nancost.fragments.update
 
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.nancost.R
-import com.example.nancost.databinding.FragmentAddBinding
+import com.example.nancost.databinding.FragmentDateAddBinding
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -22,19 +21,21 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-
-class AddFragment : Fragment() {
-
-    private var _binding: FragmentAddBinding? = null
+class DateAddFragment : Fragment() {
+    private var _binding: FragmentDateAddBinding? = null
     private val binding get() = _binding!!
     private var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
+    private val args by navArgs<DateAddFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddBinding.inflate(inflater, container, false)
-        return binding.root
+        _binding = FragmentDateAddBinding.inflate(inflater, container, false)
+        val view = binding.root
+        binding.nameContent.text = args.currentNancost?.nancostName
+        nancostDataList = args.currentNancost?.nancostDataList
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -45,20 +46,12 @@ class AddFragment : Fragment() {
     }
 
     private fun insertDataToDatabase() {
-        val nancostUid = UUID.randomUUID().toString()
         val nancostDataUid = UUID.randomUUID().toString()
-        val nameContent = binding.nameContent.text.toString()
         val receivedVolumeContent = binding.receivedVolumeContent.text
         val deliveredLeavesContent = binding.deliveredLeavesContent.text
         val deliveredVolumeContent = binding.deliveredVolumeContent.text
 
-        if (inputCheck(
-                nameContent,
-                receivedVolumeContent,
-                deliveredLeavesContent,
-                deliveredVolumeContent
-            )
-        ) {
+        if (inputCheck(receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent)) {
             val nancostData = NancostData(
                 nancostDataUid,
                 receivedVolumeContent.toString().toDouble(),
@@ -66,15 +59,15 @@ class AddFragment : Fragment() {
                 deliveredVolumeContent.toString().toDouble()
             )
             nancostDataList?.add(nancostData)
-            nancostData.getRemainingVolume()
-            nancostData.getAmountPay()
             val nancost = Nancost(
-                nancostUid,
-                nameContent,
+                args.currentNancost?.nancostUid,
+                args.currentNancost?.nancostName,
                 nancostDataList
             )
+            nancostData.getRemainingVolume()
+            nancostData.getAmountPay()
             Firebase.database.getReference("nancost/")
-                .child(nancostUid)
+                .child("${args.currentNancost?.nancostUid}")
                 .setValue(nancost)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
@@ -84,17 +77,16 @@ class AddFragment : Fragment() {
                 }
             lifecycleScope.launch {
                 delay(1000)
-                findNavController().navigate(R.id.action_addFragment_to_listFragment)
+                findNavController().navigate(R.id.action_dateAddFragment_to_dateUpdateFragment)
             }
         }
     }
 
     private fun inputCheck(
-        name: String,
         receivedVolume: Editable,
         deliveredLeaves: Editable,
         deliveredVolume: Editable
     ): Boolean {
-        return !(TextUtils.isEmpty(name) && receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
+        return !(receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
     }
 }

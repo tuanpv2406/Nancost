@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "973546244863",
+    "firebase_url": "https://nancost-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "nancost",
+    "storage_bucket": "nancost.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:973546244863:android:844b7e7f5e951c1ce91aca",
+        "android_client_info": {
+          "package_name": "com.example.nancost"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "973546244863-chq8jd8nd2cd7ubqgcsak8ru1mkp2jdp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANQDenzx2PLe_oYXTshNqJwpy7fRUF83I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "973546244863-chq8jd8nd2cd7ubqgcsak8ru1mkp2jdp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

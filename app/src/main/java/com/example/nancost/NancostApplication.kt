@@ -17,14 +17,17 @@
 package com.example.nancost
 
 import android.app.Application
-import com.example.nancost.data.NancostDatabase
-import com.example.nancost.data.repository.NancostRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.selects.SelectInstance
 
 class NancostApplication : Application() {
-    // Using by lazy so the database and the repository are only created when they're needed
-    // rather than when the application starts
-    val database by lazy { NancostDatabase.getInstance(this) }
-    val repository by lazy { NancostRepository(database.nancostDao()) }
+    override fun onCreate() {
+        super.onCreate()
+        instance = this
+    }
+
+    companion object {
+        lateinit var instance: NancostApplication
+    }
 }

@@ -1,20 +1,19 @@
-package com.example.nancost.fragments.list
+package com.example.nancost.fragments.update
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.example.nancost.databinding.RowItemBinding
-import com.example.nancost.model.Nancost
+import com.example.nancost.databinding.UpdateItemBinding
+import com.example.nancost.model.NancostData
 
-class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
+class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
+    private var nancostList = arrayListOf<NancostData?>()
 
-    private var nancostList = arrayListOf<Nancost?>()
-
-    inner class MyViewHolder(val binding: RowItemBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class MyViewHolder(val binding: UpdateItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
-        val binding = RowItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = UpdateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return MyViewHolder(binding)
     }
@@ -28,17 +27,20 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         currentItem?.let {
             with(holder) {
                 binding.index = position
-                binding.name.text = currentItem.nancostName
+                binding.tvDay.text = currentItem.dayAdded
+
                 binding.rowLayout.setOnClickListener {
                     val action =
-                        ListFragmentDirections.actionListFragmentToDateUpdateFragment(currentItem)
+                        DateUpdateFragmentDirections.actionDateUpdateFragmentToUpdateFragment(
+                            currentItem
+                        )
                     holder.itemView.findNavController().navigate(action)
                 }
             }
         }
     }
 
-    fun setData(nancostList: ArrayList<Nancost?>) {
+    fun setData(nancostList: ArrayList<NancostData?>) {
         this.nancostList = nancostList
         notifyDataSetChanged()
     }
