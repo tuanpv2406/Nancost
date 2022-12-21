@@ -54,6 +54,7 @@ class DateAddFragment : Fragment() {
         if (inputCheck(receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent)) {
             val nancostData = NancostData(
                 nancostDataUid,
+                args.currentNancost?.nancostUid,
                 receivedVolumeContent.toString().toDouble(),
                 deliveredLeavesContent.toString().toInt(),
                 deliveredVolumeContent.toString().toDouble()
@@ -77,7 +78,7 @@ class DateAddFragment : Fragment() {
                 }
             lifecycleScope.launch {
                 delay(1000)
-                findNavController().navigate(R.id.action_dateAddFragment_to_dateUpdateFragment)
+                findNavController().navigate(R.id.action_dateAddFragment_to_listFragment)
             }
         }
     }

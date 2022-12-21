@@ -12,7 +12,14 @@ import androidx.navigation.fragment.navArgs
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentUpdateBinding
 import com.example.nancost.model.Nancost
+import com.example.nancost.model.NancostData
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.util.*
+import kotlin.collections.ArrayList
 
 class UpdateFragment : Fragment() {
 
@@ -20,6 +27,8 @@ class UpdateFragment : Fragment() {
 
     private var _binding: FragmentUpdateBinding? = null
     private val binding get() = _binding!!
+    private val nancostDataList: ArrayList<NancostData?> = arrayListOf()
+    private var indexMatched = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,6 +40,25 @@ class UpdateFragment : Fragment() {
         binding.deliveredLeavesContent.setText(args.currentNancost?.deliveredLeaves.toString())
         binding.deliveredVolumeContent.setText(args.currentNancost?.deliveredVolume.toString())
 
+        Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (ds in snapshot.children) {
+                            val data: NancostData? = ds.getValue(NancostData::class.java)
+                            nancostDataList.add(data)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+        nancostDataList.forEachIndexed { index, item ->
+            if (item?.nancostDataUid == args.currentNancost?.nancostDataUid) {
+                indexMatched = index
+            }
+        }
 
         binding.btnUpdate.setOnClickListener {
             updateItem()
@@ -57,22 +85,18 @@ class UpdateFragment : Fragment() {
                 receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent
             )
         ) {
-//            val nancostData = Nancost.NancostData(
-//                args.currentNancostData.nancostDataUid,
-//                receivedVolumeContent.toString().toDouble(),
-//                deliveredLeavesContent.toString().toInt(),
-//                deliveredVolumeContent.toString().toDouble()
-//            )
-//            nancostData.getRemainingVolume()
-//            nancostData.getAmountPay()
+            val nancostData = NancostData(
+                args.currentNancost?.nancostDataUid,
+                args.currentNancost?.nancostUid,
+                receivedVolumeContent.toString().toDouble(),
+                deliveredLeavesContent.toString().toInt(),
+                deliveredVolumeContent.toString().toDouble()
+            )
+            nancostData.getRemainingVolume()
+            nancostData.getAmountPay()
 
-//            FirebaseDatabase.getInstance().getReference().child("nancost").child().updateChildren(childUpdates)
-//                .addOnSuccessListener {
-//                    Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_LONG).show()
-//                }
-//                .addOnFailureListener {
-//                    Toast.makeText(context, "Cập nhật thất bại!", Toast.LENGTH_LONG).show()
-//                }
+            Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
+                .setValue(nancostData)
 
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
@@ -102,6 +126,8 @@ class UpdateFragment : Fragment() {
     private fun deleteNancost() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setPositiveButton("Có") { _, _ ->
+            Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
+                .removeValue()
             Toast.makeText(
                 requireContext(), "Đã xóa?", Toast.LENGTH_SHORT
             ).show()

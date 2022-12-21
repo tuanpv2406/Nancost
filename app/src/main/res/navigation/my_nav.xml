@@ -64,8 +64,8 @@
         android:label="Thêm bản ghi"
         tools:layout="@layout/fragment_date_add" >
         <action
-            android:id="@+id/action_dateAddFragment_to_dateUpdateFragment"
-            app:destination="@id/dateUpdateFragment" />
+            android:id="@+id/action_dateAddFragment_to_listFragment"
+            app:destination="@id/listFragment" />
         <argument
             android:name="currentNancost"
             app:argType="com.example.nancost.model.Nancost"

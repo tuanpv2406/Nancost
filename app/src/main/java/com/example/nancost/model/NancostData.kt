@@ -11,6 +11,9 @@ data class NancostData(
     @SerializedName("nancost_data_id")
     var nancostDataUid: String? = null,
 
+    @SerializedName("nancost_id")
+    var nancostUid: String? = null,
+
     @SerializedName("received_volume")
     var receivedVolume: Double? = null,
 
@@ -33,6 +36,7 @@ data class NancostData(
     var dayAdded: String? = SimpleDateFormat("dd/MM/yyyy").format(Date())
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,

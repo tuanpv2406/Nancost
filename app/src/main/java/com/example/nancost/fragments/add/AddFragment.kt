@@ -61,6 +61,7 @@ class AddFragment : Fragment() {
         ) {
             val nancostData = NancostData(
                 nancostDataUid,
+                nancostUid,
                 receivedVolumeContent.toString().toDouble(),
                 deliveredLeavesContent.toString().toInt(),
                 deliveredVolumeContent.toString().toDouble()

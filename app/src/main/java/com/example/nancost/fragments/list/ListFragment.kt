@@ -22,7 +22,6 @@ class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
     val nancostList: ArrayList<Nancost?> = arrayListOf()
-    val nancostDataList: ArrayList<NancostData?> = arrayListOf()
     val adapter = ListAdapter()
 
     override fun onCreateView(
@@ -35,38 +34,12 @@ class ListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        val valueEventListener: ValueEventListener = object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (ds in snapshot.children) {
-                        val nancostData: NancostData? = ds.getValue(NancostData::class.java)
-                        val nancostDataIterator = nancostDataList.iterator()
-                        if (nancostDataIterator.hasNext()) {
-                            if (nancostDataIterator.next()?.nancostDataUid == nancostData?.nancostDataUid) return
-                            else {
-                                nancostDataList.add(nancostData)
-                            }
-                        } else {
-                            nancostDataList.add(nancostData)
-                        }
-                    }
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-            }
-        }
-
         Firebase.database.getReference("nancost/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
                         for (ds in snapshot.children) {
                             val nancost: Nancost? = ds.getValue(Nancost::class.java)
-//                            Firebase.database.getReference("nancost/")
-//                                .child("${nancost?.nancostUid}")
-//                                .child("nancosstDataList").get()
-//                            nancost?.nancostDataList = nancostDataList
                             val nancostIterator = nancostList.iterator()
                             if (nancostIterator.hasNext()) {
                                 if (nancostIterator.next()?.nancostUid == nancost?.nancostUid) return
