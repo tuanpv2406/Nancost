@@ -1,6 +1,27 @@
 <resources>
     <string name="app_name">Nancost</string>
     <string name="action_settings">Settings</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_login">Đăng nhập</string>
+    <string name="str_login_notice_msg">Vui lòng nhập tên đăng nhập và mật khẩu</string>
+    <string name="str_register_notice_msg">Vui lòng nhập đầy đủ các trường</string>
+    <string name="str_save_login">Lưu đăng nhập</string>
+    <string name="str_register">Đăng ký</string>
+    <string name="str_empty_field">Hãy nhập đủ tên đăng nhập và mật khẩu</string>
+    <string name="str_invalid_username">Tên đăng nhập không chính xác</string>
+    <string name="str_invalid_password">Mật khẩu không chính xác</string>
+    <string name="str_match_password">2 trường mật khẩu phải khớp nhau</string>
+    <string name="str_add">Thêm</string>
+    <string name="str_number_record">%d bản ghi</string>
+    <string name="str_update">Cập nhật</string>
+    <string name="str_name">Tên</string>
+    <string name="str_received_volume">Khối lượng đã nhận</string>
+    <string name="str_delivered_leaves">Số lá đã giao</string>
+    <string name="str_delivered_volume">Khối lượng đã giao</string>
+    <string name="str_unit_price">Đơn giá</string>
+    <string name="str_amout_pay">Số tiền phải trả</string>
+    <string name="str_remaining_volume">Khối lượng còn lại</string>
+    <string name="str_change_price">Thay đổi giá cót</string>
+    <string name="version">Nancost version %s</string>
+    <string name="str_paid">Đã trả tiền</string>
 </resources>

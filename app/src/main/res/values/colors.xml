@@ -10,4 +10,12 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="main_green">#3CA43C</color>
+    <color name="transparent">#00000000</color>
+    <color name="gray">#c8c8c8</color>
+    <color name="gray_list">#FDFDFD</color>
+    <color name="red">#d32f2f</color>
+    <color name="color_ff483c">#ff483c</color>
+    <color name="color_18c090">#18c090</color>
+    <color name="color_FF6024">#FF6024</color>
 </resources>

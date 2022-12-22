@@ -37,6 +37,20 @@
         <item name="windowActionBarOverlay">true</item>
         <item name="android:windowActionBarOverlay">true</item>
     </style>
+    <style name="AppTheme.FullscreenGreen">
+        <item name="colorPrimary">@color/main_green</item>
+        <item name="colorPrimaryDark">@color/main_green</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:actionBarSize">56dp</item>
+        <item name="android:windowTranslucentStatus" tools:ignore="NewApi">false</item>
+        <item name="android:windowContentTransitions" tools:ignore="NewApi">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
     <style name="SplashScreen.Background" parent="AppTheme.Fullscreen">
         <item name="android:windowBackground">@color/black</item>
     </style>
@@ -44,4 +58,30 @@
     <style name="Theme.Nancost.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.Nancost.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="TextMenuDesign">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:lineSpacingExtra">12dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="IndicatorDesign">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">#b4b4b4</item>
+    </style>
+
+    <style name="IndicatorDesign.Padding" parent="IndicatorDesign">
+        <item name="android:layout_marginLeft">@dimen/dp_24</item>
+        <item name="android:layout_marginRight">@dimen/dp_24</item>
+    </style>
 </resources>

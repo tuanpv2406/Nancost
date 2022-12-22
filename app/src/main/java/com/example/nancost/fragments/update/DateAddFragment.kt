@@ -2,6 +2,7 @@ package com.example.nancost.fragments.update
 
 import android.os.Bundle
 import android.text.Editable
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -33,7 +34,7 @@ class DateAddFragment : Fragment() {
     ): View {
         _binding = FragmentDateAddBinding.inflate(inflater, container, false)
         val view = binding.root
-        binding.nameContent.text = args.currentNancost?.nancostName
+        args.currentNancost?.nancostName?.let { binding.nameContent.setText(it) }
         nancostDataList = args.currentNancost?.nancostDataList
         return view
     }
@@ -47,17 +48,17 @@ class DateAddFragment : Fragment() {
 
     private fun insertDataToDatabase() {
         val nancostDataUid = UUID.randomUUID().toString()
-        val receivedVolumeContent = binding.receivedVolumeContent.text
-        val deliveredLeavesContent = binding.deliveredLeavesContent.text
-        val deliveredVolumeContent = binding.deliveredVolumeContent.text
+        val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
+        val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
+        val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
 
-        if (inputCheck(receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent)) {
+        if (receivedVolumeContent.isNotBlank()) {
             val nancostData = NancostData(
                 nancostDataUid,
                 args.currentNancost?.nancostUid,
-                receivedVolumeContent.toString().toDouble(),
-                deliveredLeavesContent.toString().toInt(),
-                deliveredVolumeContent.toString().toDouble()
+                receivedVolumeContent.toDouble(),
+                deliveredLeavesContent.toInt(),
+                deliveredVolumeContent.toDouble()
             )
             nancostDataList?.add(nancostData)
             val nancost = Nancost(
@@ -80,14 +81,9 @@ class DateAddFragment : Fragment() {
                 delay(1000)
                 findNavController().navigate(R.id.action_dateAddFragment_to_listFragment)
             }
+        } else {
+            binding.tvError.visibility = View.VISIBLE
+            binding.tvError.text = getString(R.string.str_register_notice_msg)
         }
-    }
-
-    private fun inputCheck(
-        receivedVolume: Editable,
-        deliveredLeaves: Editable,
-        deliveredVolume: Editable
-    ): Boolean {
-        return !(receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
     }
 }

@@ -1,7 +1,6 @@
 package com.example.nancost.fragments.list
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -9,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentListBinding
 import com.example.nancost.model.Nancost
-import com.example.nancost.model.NancostData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -75,8 +73,13 @@ class ListFragment : Fragment() {
                 return false
             }
         })
+
         binding.fabAdd.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
+        }
+
+        binding.btnMenu.setOnClickListener {
+            findNavController().navigate(R.id.action_listFragment_to_menuFragment)
         }
     }
 

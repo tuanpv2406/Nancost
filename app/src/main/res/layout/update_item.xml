@@ -3,28 +3,22 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-        <variable
-            name="index"
-            type="Integer" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="24sp"
+        android:paddingTop="@dimen/dp_20"
+        android:paddingBottom="@dimen/dp_20"
         android:id="@+id/rowLayout">
 
-        <TextView
+        <ImageView
             android:id="@+id/tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{String.valueOf(index + 1)}"
-            android:textSize="20sp"
-            android:textStyle="bold"
+            android:src="@drawable/ic_date_range"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="match_parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
         <TextView
             android:id="@+id/tv_day"
             android:layout_width="wrap_content"
@@ -32,7 +26,8 @@
             android:text="24/06/2022"
             android:textSize="32sp"
             android:textStyle="bold"
-            android:layout_marginStart="30dp"
+            android:textColor="@color/black"
+            android:layout_marginStart="@dimen/dp_16"
             app:layout_constraintLeft_toRightOf="@id/tv"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

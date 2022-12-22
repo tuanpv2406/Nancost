@@ -27,8 +27,8 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         val currentItem = nancostList[position]
         currentItem?.let {
             with(holder) {
-                binding.index = position
                 binding.name.text = currentItem.nancostName
+                binding.numberRecord.text = "${currentItem.nancostDataList?.size} bản ghi"
                 binding.rowLayout.setOnClickListener {
                     val action =
                         ListFragmentDirections.actionListFragmentToDateUpdateFragment(currentItem)

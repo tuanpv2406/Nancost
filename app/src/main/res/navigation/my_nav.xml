@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_listFragment_to_dateUpdateFragment"
             app:destination="@id/dateUpdateFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -71,5 +74,14 @@
             app:argType="com.example.nancost.model.Nancost"
             app:nullable="true"
             android:defaultValue="@null"/>
+    </fragment>
+    <fragment
+        android:id="@+id/menuFragment"
+        android:name="com.example.nancost.fragments.menu.MenuFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_menu" >
+        <action
+            android:id="@+id/action_menuFragment_to_listFragment"
+            app:destination="@id/addFragment" />
     </fragment>
 </navigation>

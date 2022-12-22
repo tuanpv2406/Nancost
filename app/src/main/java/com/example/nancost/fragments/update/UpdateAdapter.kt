@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nancost.R
 import com.example.nancost.databinding.UpdateItemBinding
 import com.example.nancost.model.NancostData
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
-    private var nancostList = arrayListOf<NancostData?>()
+    private var nancostList = listOf<NancostData?>()
 
     inner class MyViewHolder(val binding: UpdateItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -26,9 +29,16 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
         val currentItem = nancostList[position]
         currentItem?.let {
             with(holder) {
-                binding.index = position
                 binding.tvDay.text = currentItem.dayAdded
-
+                if (currentItem.isPaid == false) {
+                    binding.rowLayout.setBackgroundResource(R.drawable.bg_unpaid)
+                } else {
+                    if ((currentItem.receivedVolume ?: 0.0) > (currentItem.deliveredVolume ?: 0.0)) {
+                        binding.rowLayout.setBackgroundResource(R.drawable.bg_not_enough_volume)
+                    } else {
+                        binding.rowLayout.setBackgroundResource(R.drawable.bg_paid)
+                    }
+                }
                 binding.rowLayout.setOnClickListener {
                     val action =
                         DateUpdateFragmentDirections.actionDateUpdateFragmentToUpdateFragment(
@@ -41,7 +51,13 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
     }
 
     fun setData(nancostList: ArrayList<NancostData?>) {
-        this.nancostList = nancostList
+        val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+        val result = nancostList.sortedBy {
+            LocalDate.parse(it?.dayAdded, dateTimeFormatter)
+        }
+
+        this.nancostList = result
         notifyDataSetChanged()
     }
 }

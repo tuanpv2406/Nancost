@@ -71,15 +71,17 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.remainingVolumeContent.text = args.currentNancost?.getRemainingVolume().toString()
-        binding.unitPriceContent.text = args.currentNancost?.unitPrice.toString()
-        binding.amoutPayContent.text = args.currentNancost?.getAmountPay().toString()
+        binding.remainingVolumeContent.setText(args.currentNancost?.getRemainingVolume().toString())
+        binding.unitPriceContent.setText(args.currentNancost?.unitPrice.toString())
+        binding.amountPayContent.setText(args.currentNancost?.getAmountPay().toString())
+        binding.checkboxPaid.isChecked = args.currentNancost?.isPaid == true
     }
 
     private fun updateItem() {
-        val receivedVolumeContent = binding.receivedVolumeContent.text
-        val deliveredLeavesContent = binding.deliveredLeavesContent.text
-        val deliveredVolumeContent = binding.deliveredVolumeContent.text
+        val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
+        val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
+        val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
+        val isPaid = binding.checkboxPaid.isChecked
 
         if (inputCheck(
                 receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent
@@ -88,9 +90,10 @@ class UpdateFragment : Fragment() {
             val nancostData = NancostData(
                 args.currentNancost?.nancostDataUid,
                 args.currentNancost?.nancostUid,
-                receivedVolumeContent.toString().toDouble(),
-                deliveredLeavesContent.toString().toInt(),
-                deliveredVolumeContent.toString().toDouble()
+                receivedVolumeContent.toDouble(),
+                deliveredLeavesContent.toInt(),
+                deliveredVolumeContent.toDouble(),
+                isPaid = isPaid
             )
             nancostData.getRemainingVolume()
             nancostData.getAmountPay()
@@ -100,15 +103,17 @@ class UpdateFragment : Fragment() {
 
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {
-            Toast.makeText(requireContext(), "Hãy điền hết tất cả các trường...", Toast.LENGTH_LONG)
-                .show()
+            binding.tvError.visibility = View.VISIBLE
+            binding.tvError.text = getString(R.string.str_register_notice_msg)
         }
     }
 
     private fun inputCheck(
-        receivedVolume: Editable, deliveredLeaves: Editable, deliveredVolume: Editable
+        receivedVolume: String,
+        deliveredLeaves: String,
+        deliveredVolume: String
     ): Boolean {
-        return !(receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
+        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank())
     }
 
 

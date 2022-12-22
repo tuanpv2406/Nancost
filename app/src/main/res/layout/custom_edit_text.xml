@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="label"
+            type="String" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rlt"
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edtInput"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@null"
+            android:lines="1"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:textSize="28sp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:singleLine="true" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@null"
+            android:lines="1"
+            android:gravity="start|center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:textSize="28sp"
+            android:visibility="gone"
+            android:singleLine="true" />
+
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:background="@drawable/ic_bg_edittext_information"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:textColor="#ff483c"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="メールアドレスを入力してください" />
+    </RelativeLayout>
+</layout>

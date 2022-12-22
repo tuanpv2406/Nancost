@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import at.favre.lib.crypto.bcrypt.BCrypt
@@ -26,12 +27,12 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnLogin.setOnClickListener {
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
+            val username = binding.username.getText()
+            val password = binding.password.getText()
 
             if (TextUtils.isEmpty(username) && TextUtils.isEmpty(password)) {
-                Toast.makeText(this, "Hãy nhập đủ tên đăng nhập và mật khẩu!", Toast.LENGTH_SHORT)
-                    .show()
+                binding.tvErrorLogin.setTextColor(R.color.red)
+                binding.tvErrorLogin.text = getString(R.string.str_empty_field)
             }
 
             if (binding.tvSaveLogin.isChecked) {
@@ -47,19 +48,15 @@ class LoginActivity : AppCompatActivity() {
                                 BCrypt.verifyer().verify(password.toCharArray(), passHashed)
                             if (result.verified) {
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                                binding.tvErrorLogin.setTextColor(R.color.black)
+                                binding.tvErrorLogin.text = getString(R.string.str_login_notice_msg)
                             } else {
-                                Toast.makeText(
-                                    this@LoginActivity,
-                                    "Mật khẩu không chính xác!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                binding.tvErrorLogin.setTextColor(R.color.red)
+                                binding.tvErrorLogin.text = getString(R.string.str_invalid_username)
                             }
                         } else {
-                            Toast.makeText(
-                                this@LoginActivity,
-                                "Tên đăng nhập không chính xác!",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            binding.tvErrorLogin.setTextColor(R.color.red)
+                            binding.tvErrorLogin.text = getString(R.string.str_invalid_password)
                         }
                     }
 

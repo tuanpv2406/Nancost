@@ -3,6 +3,7 @@ package com.example.nancost
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import at.favre.lib.crypto.bcrypt.BCrypt
@@ -18,22 +19,24 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.btnLogin.setOnClickListener {
-            val username = binding.username.text.toString().trim()
-            val password = binding.password.text.toString().trim()
-            val rePassword = binding.rePassword.text.toString().trim()
-            if (TextUtils.isEmpty(username) && TextUtils.isEmpty(password) && TextUtils.isEmpty(
-                    rePassword
-                )
+        binding.btnRegister.setOnClickListener {
+            val username = binding.username.getText().trim()
+            val password = binding.password.getText()
+            val rePassword = binding.rePassword.getText()
+            if (TextUtils.isEmpty(username) && TextUtils.isEmpty(password) && TextUtils.isEmpty(rePassword)
             ) {
-                Toast.makeText(this, "Hãy nhập đầy đủ các trường!", Toast.LENGTH_SHORT).show()
+                binding.tvErrorRegister.setTextColor(R.color.red)
+                binding.tvErrorRegister.text = getString(R.string.str_register_notice_msg)
             } else if (!password.equals(rePassword)) {
-                Toast.makeText(this, "2 trường mật khẩu phải khớp nhau!", Toast.LENGTH_SHORT).show()
+                binding.tvErrorRegister.setTextColor(R.color.red)
+                binding.tvErrorRegister.text = getString(R.string.str_match_password)
             } else {
                 val passHashed = BCrypt.withDefaults().hashToString(12, password.toCharArray())
                 val user = User(username, passHashed)
                 FirebaseDatabase.getInstance().getReference("hash/login/$username/").setValue(user)
                     .addOnSuccessListener {
+                        binding.tvErrorRegister.setTextColor(R.color.black)
+                        binding.tvErrorRegister.text = getString(R.string.str_register_notice_msg)
                         Toast.makeText(this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this, LoginActivity::class.java))
                     }

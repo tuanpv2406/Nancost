@@ -27,10 +27,13 @@ data class NancostData(
     var remainVolume: Double? = null,
 
     @SerializedName("unit_price")
-    var unitPrice: Double = 8000.0,
+    var unitPrice: Int? = 8000,
 
     @SerializedName("amount_will_pay")
-    var amountWillPay: Double? = null,
+    var amountWillPay: Int? = null,
+
+    @SerializedName("is_paid")
+    var isPaid: Boolean? = false,
 
     @SuppressLint("SimpleDateFormat") @SerializedName("day_added")
     var dayAdded: String? = SimpleDateFormat("dd/MM/yyyy").format(Date())
@@ -42,9 +45,10 @@ data class NancostData(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readDouble(),
-        parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readString()
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readBoolean(),
+        parcel.readString(),
     ) {
     }
 
@@ -52,15 +56,16 @@ data class NancostData(
     fun getRemainingVolume() = deliveredVolume?.let { receivedVolume?.minus(it) }
 
     @JvmName("amountWillPay")
-    fun getAmountPay() = deliveredLeaves?.times(unitPrice)
+    fun getAmountPay() = unitPrice?.let { deliveredLeaves?.times(it) }
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(nancostDataUid)
         parcel.writeValue(receivedVolume)
         parcel.writeValue(deliveredLeaves)
         parcel.writeValue(deliveredVolume)
         parcel.writeValue(remainVolume)
-        parcel.writeDouble(unitPrice)
+        parcel.writeValue(unitPrice)
         parcel.writeValue(amountWillPay)
+        parcel.writeValue(isPaid)
         parcel.writeString(dayAdded)
     }
 

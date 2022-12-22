@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleView">
+        <attr name="titleText" format="string" />
+        <attr name="rightIcon" format="reference" />
+        <attr name="rightText" format="string" />
+        <attr name="rightTextColor" format="color" />
+        <attr name="leftIcon" format="reference" />
+        <attr name="titleColor" format="color" />
+        <attr name="android:background" />
+        <attr name="need_divider" format="boolean" />
+        <attr name="iconLeft" format="boolean" />
+        <attr name="iconRight" format="boolean" />
+        <attr name="iconCenter" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="UITitleField">
+        <attr name="field_title" format="string" />
+        <attr name="field_is_required" format="boolean" />
+    </declare-styleable>
+
+    <declare-styleable name="UITextFieldView">
+        <attr name="textHint" format="string" />
+        <attr name="textErrorEmpty" format="string" />
+        <attr name="textErrorInvalid" format="string" />
+        <attr name="textErrorOrther" format="string" />
+        <attr name="textColorError" format="color" />
+        <attr name="lengthMax" format="dimension" />
+        <!-- standart attributes, note android: prefix and no format attribute -->
+        <attr name="android:imeOptions" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+    <declare-styleable name="UITextField">
+        <attr name="android:layout_width" />
+        <attr name="android:layout_height" />
+        <attr name="android:hint" />
+        <attr name="android:imeOptions" />
+        <attr name="android:inputType" />
+        <attr name="android:maxLength" />
+        <attr name="android:textStyle" />
+        <attr name="android:gravity" />
+        <attr name="android:longClickable" />
+        <attr name="android:enabled" />
+    </declare-styleable>
+</resources>

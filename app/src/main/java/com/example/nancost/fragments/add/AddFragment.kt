@@ -48,23 +48,17 @@ class AddFragment : Fragment() {
         val nancostUid = UUID.randomUUID().toString()
         val nancostDataUid = UUID.randomUUID().toString()
         val nameContent = binding.nameContent.text.toString()
-        val receivedVolumeContent = binding.receivedVolumeContent.text
-        val deliveredLeavesContent = binding.deliveredLeavesContent.text
-        val deliveredVolumeContent = binding.deliveredVolumeContent.text
+        val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
+        val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
+        val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
 
-        if (inputCheck(
-                nameContent,
-                receivedVolumeContent,
-                deliveredLeavesContent,
-                deliveredVolumeContent
-            )
-        ) {
+        if (inputCheck(nameContent, receivedVolumeContent)) {
             val nancostData = NancostData(
                 nancostDataUid,
                 nancostUid,
-                receivedVolumeContent.toString().toDouble(),
-                deliveredLeavesContent.toString().toInt(),
-                deliveredVolumeContent.toString().toDouble()
+                receivedVolumeContent.toDouble(),
+                deliveredLeavesContent.toInt(),
+                deliveredVolumeContent.toDouble()
             )
             nancostDataList?.add(nancostData)
             nancostData.getRemainingVolume()
@@ -87,15 +81,16 @@ class AddFragment : Fragment() {
                 delay(1000)
                 findNavController().navigate(R.id.action_addFragment_to_listFragment)
             }
+        } else {
+            binding.tvError.visibility = View.VISIBLE
+            binding.tvError.text = getString(R.string.str_register_notice_msg)
         }
     }
 
     private fun inputCheck(
         name: String,
-        receivedVolume: Editable,
-        deliveredLeaves: Editable,
-        deliveredVolume: Editable
+        receivedVolume: String
     ): Boolean {
-        return !(TextUtils.isEmpty(name) && receivedVolume.isEmpty() && deliveredLeaves.isEmpty() && deliveredVolume.isEmpty())
+        return (name.isNotBlank() && receivedVolume.isNotBlank())
     }
 }
