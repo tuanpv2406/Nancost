@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentUpdateBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
 import com.example.nancost.utils.StringUtils
@@ -42,7 +43,17 @@ class UpdateFragment : Fragment() {
         binding.deliveredVolumeContent.setText(args.currentNancost?.deliveredVolume.toString())
 
         binding.btnUpdate.setOnClickListener {
-            updateItem()
+            ActionDialog.show( childFragmentManager,
+                "Cập nhật",
+                "Bạn có chắc chắn với những thông tin cần cập nhật?"
+            ).apply {
+                onNegativeActionListener = {
+                    dismiss()
+                }
+                onPositiveActionListener = {
+                    updateItem()
+                }
+            }
         }
 
         setHasOptionsMenu(true)
@@ -76,11 +87,14 @@ class UpdateFragment : Fragment() {
         binding.amountPayContent.setText(StringUtils.formatCurrency(args.currentNancost?.amountWillPay?: 0))
         binding.amountPaidContent.setText(StringUtils.formatCurrency((args.currentNancost?.amountPaid ?: 0)))
         binding.checkboxPaid.isChecked = args.currentNancost?.isPaid == true
+
         binding.checkboxPaid.setOnClickListener {
             if (binding.checkboxPaid.isChecked) {
                 binding.deliveredVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
             }
         }
+
+        binding.delete.setOnClickListener { deleteNancost() }
     }
 
     private fun updateItem() {
@@ -133,32 +147,21 @@ class UpdateFragment : Fragment() {
         return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank() && amountPaid.isNotBlank())
     }
 
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.delete) {
-            deleteNancost()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun deleteNancost() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Có") { _, _ ->
-            Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
-                .removeValue()
-            Toast.makeText(
-                requireContext(), "Đã xóa?", Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+        ActionDialog.show( childFragmentManager,
+            "Xóa bản ghi",
+            "Bạn có chắc chắn xóa bản ghi này?"
+        ).apply {
+            onNegativeActionListener = {
+                dismiss()
+            }
+            onPositiveActionListener = {
+                Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
+                    .removeValue()
+                Toast.makeText(requireContext(), "Đã xóa thành công!", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
+            }
         }
-        builder.setNegativeButton("Không") { _, _ -> }
-        builder.setTitle("Xóa?")
-        builder.setMessage("Bạn đã chắc chắn xóa chưa?")
-        builder.create().show()
     }
 
 }

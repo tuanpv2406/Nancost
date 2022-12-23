@@ -88,4 +88,9 @@
     <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
     </style>
+
+    <style name="DialogStyle" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowMinWidthMajor">80%</item>
+        <item name="android:windowMinWidthMinor">80%</item>
+    </style>
 </resources>

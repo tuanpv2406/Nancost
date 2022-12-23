@@ -13,8 +13,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentDateAddBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
@@ -27,6 +30,7 @@ class DateAddFragment : Fragment() {
     private val binding get() = _binding!!
     private var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
     private val args by navArgs<DateAddFragmentArgs>()
+    private var newPrice: Int? = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +40,24 @@ class DateAddFragment : Fragment() {
         val view = binding.root
         args.currentNancost?.nancostName?.let { binding.nameContent.setText(it) }
         nancostDataList = args.currentNancost?.nancostDataList
+        newPrice = SharedPreUtils.getInt(AppConstant.Enum.NEW_PRICE, 0)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAdd.setOnClickListener {
-            insertDataToDatabase()
+            ActionDialog.show( childFragmentManager,
+                "Thêm bản ghi mới",
+                "Bạn có chắc chắn thêm bản ghi mới cho ${binding.nameContent.text.toString()}?"
+            ).apply {
+            onNegativeActionListener = {
+                    dismiss()
+                }
+                onPositiveActionListener = {
+                    insertDataToDatabase()
+                }
+            }
         }
     }
 
@@ -63,7 +78,8 @@ class DateAddFragment : Fragment() {
                 args.currentNancost?.nancostUid,
                 receivedVolumeContent.toDouble(),
                 deliveredLeavesContent.toInt(),
-                deliveredVolumeContent.toDouble()
+                deliveredVolumeContent.toDouble(),
+                unitPrice = newPrice
             )
             val remainingVolume = nancostData.getRemainingVolume()
             val amountWillPay = nancostData.getAmountPay()

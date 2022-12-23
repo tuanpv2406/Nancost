@@ -1,9 +1,10 @@
 package com.example.nancost.utils
 
 interface AppConstant {
-    annotation class UserLogin {
+    annotation class Enum {
         companion object {
             const val HAS_LOGGED_IN = "HAS_LOGGED_IN"
+            const val NEW_PRICE = "NEW_PRICE"
         }
     }
 }

@@ -31,4 +31,9 @@
     <string name="str_total_received_volume">Tổng khối lượng nhận về (kg)</string>
     <string name="str_amount_paid">Số tiền đã trả (đ)</string>
     <string name="str_total_amout_will_pay">Tổng tiền phải trả (đ)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="str_yes">Có</string>
+    <string name="str_no">Không</string>
+    <string name="str_new_price">Giá cót mới</string>
 </resources>

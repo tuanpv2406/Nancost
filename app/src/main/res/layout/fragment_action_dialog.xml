@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="title"
+            type="String" />
+
+        <variable
+            name="message"
+            type="String" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="@dimen/dp_10">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="0dp">
+
+            <LinearLayout
+                android:id="@+id/mainView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:minHeight="@dimen/dp_160"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/dp_32"
+                android:paddingRight="@dimen/dp_32"
+                android:paddingBottom="@dimen/dp_10">
+
+                <ImageView
+                    android:id="@+id/image_type"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="@dimen/dp_50"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginBottom="@dimen/dp_8"
+                    android:scaleType="fitCenter"
+                    android:background="@drawable/logo" />
+
+                <TextView
+                    android:id="@+id/text_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="@dimen/dp_10"
+                    android:maxLines="2"
+                    android:layout_marginStart="@dimen/dp_16"
+                    android:layout_marginEnd="@dimen/dp_16"
+                    android:text="@{title}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_24"/>
+
+                <TextView
+                    android:id="@+id/text_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginStart="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_12"
+                    android:layout_marginEnd="@dimen/dp_24"
+                    android:layout_marginBottom="@dimen/dp_10"
+                    android:ellipsize="end"
+                    android:gravity="center_horizontal"
+                    android:lineSpacingExtra="@dimen/dp_10"
+                    android:maxLines="3"
+                    android:text="@{message}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_16" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/layout_new_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/str_new_price"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    android:layout_marginBottom="@dimen/dp_12"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_price_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/mainView"
+                android:baselineAligned="false">
+
+                <TextView
+                    android:id="@+id/button_negative_action"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_negative"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:paddingTop="@dimen/dp_14"
+                    android:textSize="@dimen/sp_16"
+                    android:paddingBottom="@dimen/dp_14"
+                    android:text="@string/str_no"
+                    android:textColor="@color/black"/>
+
+                <TextView
+                    android:id="@+id/button_positive_action"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_button_positive"
+                    android:layout_margin="0dp"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:gravity="center"
+                    android:textSize="@dimen/sp_16"
+                    android:paddingTop="@dimen/dp_14"
+                    android:paddingBottom="@dimen/dp_14"
+                    android:text="@string/str_yes" />
+
+            </LinearLayout>
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

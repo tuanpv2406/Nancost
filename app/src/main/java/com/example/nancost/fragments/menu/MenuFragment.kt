@@ -16,6 +16,7 @@ import com.example.nancost.MainActivity
 import com.example.nancost.R
 import com.example.nancost.SplashActivity
 import com.example.nancost.databinding.FragmentMenuBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.ktx.database
@@ -46,23 +47,23 @@ class MenuFragment : Fragment() {
         }
 
         binding.layoutLogout.setOnClickListener {
-            SharedPreUtils.putBoolean(AppConstant.UserLogin.HAS_LOGGED_IN, false)
+            SharedPreUtils.putBoolean(AppConstant.Enum.HAS_LOGGED_IN, false)
             startActivity(Intent(requireContext(), SplashActivity::class.java))
         }
     }
 
     private fun showChangePriceDialog() {
-        val editTextField = EditText(requireContext())
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("Lưu") { _, _ ->
-            Toast.makeText(
-                requireContext(), "Đã lưu!", Toast.LENGTH_SHORT
-            ).show()
-            findNavController().navigate(R.id.action_menuFragment_to_listFragment)
+        ActionDialog.show( childFragmentManager,
+            "Thay đổi giá cót",
+            "Mời bạn nhập giá cót mới vào ô bên dưới",
+            true
+        ).apply {
+            onNegativeActionListener = {
+                dismiss()
+            }
+            onPositiveActionListener = {
+                dismiss()
+            }
         }
-        builder.setNegativeButton("Hủy") { _, _ -> }
-        builder.setTitle("Thay đổi giá cót")
-        builder.setView(editTextField)
-        builder.create().show()
     }
 }

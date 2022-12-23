@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             if (binding.tvSaveLogin.isChecked) {
-                SharedPreUtils.putBoolean(AppConstant.UserLogin.HAS_LOGGED_IN, true)
+                SharedPreUtils.putBoolean(AppConstant.Enum.HAS_LOGGED_IN, true)
             }
 
             Firebase.database.getReference("hash/login/$username")

@@ -20,7 +20,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             delay(1000)
-            if (SharedPreUtils.getBoolean(AppConstant.UserLogin.HAS_LOGGED_IN, false)) {
+            if (SharedPreUtils.getBoolean(AppConstant.Enum.HAS_LOGGED_IN, false)) {
                 startActivity(Intent(this@SplashActivity, MainActivity::class.java))
             } else {
                 startActivity(Intent(this@SplashActivity, LoginActivity::class.java))
