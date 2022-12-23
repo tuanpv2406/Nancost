@@ -52,7 +52,13 @@ class AddFragment : Fragment() {
         val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
         val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
 
-        if (inputCheck(nameContent, receivedVolumeContent)) {
+        if (inputCheck(
+                nameContent,
+                receivedVolumeContent,
+                deliveredLeavesContent,
+                deliveredVolumeContent
+            )
+        ) {
             val nancostData = NancostData(
                 nancostDataUid,
                 nancostUid,
@@ -60,9 +66,11 @@ class AddFragment : Fragment() {
                 deliveredLeavesContent.toInt(),
                 deliveredVolumeContent.toDouble()
             )
+            val remainingVolume = nancostData.getRemainingVolume()
+            val amountWillPay = nancostData.getAmountPay()
+            nancostData.remainVolume = remainingVolume
+            nancostData.amountWillPay = amountWillPay
             nancostDataList?.add(nancostData)
-            nancostData.getRemainingVolume()
-            nancostData.getAmountPay()
             val nancost = Nancost(
                 nancostUid,
                 nameContent,
@@ -89,8 +97,10 @@ class AddFragment : Fragment() {
 
     private fun inputCheck(
         name: String,
-        receivedVolume: String
+        receivedVolume: String,
+        deliveredLeaves: String,
+        deliveredVolume: String
     ): Boolean {
-        return (name.isNotBlank() && receivedVolume.isNotBlank())
+        return (name.isNotBlank() && receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank())
     }
 }

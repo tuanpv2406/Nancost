@@ -30,10 +30,11 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
         currentItem?.let {
             with(holder) {
                 binding.tvDay.text = currentItem.dayAdded
-                if (currentItem.isPaid == false) {
+                if (currentItem.amountPaid == null || currentItem.amountPaid == 0) {
                     binding.rowLayout.setBackgroundResource(R.drawable.bg_unpaid)
                 } else {
-                    if ((currentItem.receivedVolume ?: 0.0) > (currentItem.deliveredVolume ?: 0.0)) {
+                    if (((currentItem.receivedVolume ?: 0.0) > (currentItem.deliveredVolume ?: 0.0))
+                        || (currentItem.amountWillPay ?: 0) > (currentItem.amountPaid ?: 0)) {
                         binding.rowLayout.setBackgroundResource(R.drawable.bg_not_enough_volume)
                     } else {
                         binding.rowLayout.setBackgroundResource(R.drawable.bg_paid)

@@ -13,6 +13,7 @@ import com.example.nancost.R
 import com.example.nancost.databinding.FragmentUpdateBinding
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
+import com.example.nancost.utils.StringUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -70,20 +71,27 @@ class UpdateFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-        binding.remainingVolumeContent.setText(args.currentNancost?.getRemainingVolume().toString())
-        binding.unitPriceContent.setText(args.currentNancost?.unitPrice.toString())
-        binding.amountPayContent.setText(args.currentNancost?.getAmountPay().toString())
+        binding.remainingVolumeContent.setText(args.currentNancost?.remainVolume.toString())
+        binding.unitPriceContent.setText(StringUtils.formatCurrency(args.currentNancost?.unitPrice ?: 0))
+        binding.amountPayContent.setText(StringUtils.formatCurrency(args.currentNancost?.amountWillPay?: 0))
+        binding.amountPaidContent.setText(StringUtils.formatCurrency((args.currentNancost?.amountPaid ?: 0)))
         binding.checkboxPaid.isChecked = args.currentNancost?.isPaid == true
+        binding.checkboxPaid.setOnClickListener {
+            if (binding.checkboxPaid.isChecked) {
+                binding.deliveredVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
+            }
+        }
     }
 
     private fun updateItem() {
         val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
         val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
         val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
+        val amountPaidContent = binding.amountPaidContent.text.toString()
         val isPaid = binding.checkboxPaid.isChecked
 
         if (inputCheck(
-                receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent
+                receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent, amountPaidContent
             )
         ) {
             val nancostData = NancostData(
@@ -92,10 +100,13 @@ class UpdateFragment : Fragment() {
                 receivedVolumeContent.toDouble(),
                 deliveredLeavesContent.toInt(),
                 deliveredVolumeContent.toDouble(),
+                amountPaid = amountPaidContent.toInt(),
                 isPaid = isPaid
             )
-            nancostData.getRemainingVolume()
-            nancostData.getAmountPay()
+            val remainingVolume = nancostData.getRemainingVolume()
+            val amountWillPay = nancostData.getAmountPay()
+            nancostData.remainVolume = remainingVolume
+            nancostData.amountWillPay = amountWillPay
 
             Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
                 .setValue(nancostData)
@@ -103,7 +114,7 @@ class UpdateFragment : Fragment() {
                     Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_LONG).show()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(context, "Cập nhậ thất bại!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Cập nhật thất bại!", Toast.LENGTH_LONG).show()
                 }
 
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
@@ -116,9 +127,10 @@ class UpdateFragment : Fragment() {
     private fun inputCheck(
         receivedVolume: String,
         deliveredLeaves: String,
-        deliveredVolume: String
+        deliveredVolume: String,
+        amountPaid: String
     ): Boolean {
-        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank())
+        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank() && amountPaid.isNotBlank())
     }
 
 

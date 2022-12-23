@@ -5,9 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.room.util.StringUtil
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentTotalBinding
 import com.example.nancost.model.Nancost
+import com.example.nancost.utils.StringUtils
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -89,21 +91,24 @@ class TotalFragment : Fragment() {
     }
 
     private fun totalPerDay(date: String) {
-        var totalMoney: Int? = 0
+        var totalAmountWillPay: Int? = 0
+        var totalAmountPaid: Int? = 0
         var totalLeaves: Int? = 0
         var totalDeliveredVolume: Double? = 0.0
         var totalReceivedVolume: Double? = 0.0
         nancostList.forEach { nancost ->
             nancost?.nancostDataList?.forEach {
                 if (it?.dayAdded.equals(date)) {
-                    totalMoney = totalMoney?.plus(it?.amountWillPay?: 0)
+                    totalAmountWillPay = totalAmountWillPay?.plus(it?.amountWillPay?: 0)
+                    totalAmountPaid = totalAmountPaid?.plus(it?.amountPaid?: 0)
                     totalLeaves = totalLeaves?.plus(it?.deliveredLeaves?: 0)
                     totalDeliveredVolume = totalDeliveredVolume?.plus(it?.receivedVolume?: 0.0)
                     totalReceivedVolume = totalReceivedVolume?.plus(it?.deliveredVolume?: 0.0)
                 }
             }
         }
-        binding.totalMoney.text = totalMoney.toString()
+        binding.totalAmoutWillPay.text = StringUtils.formatCurrency(totalAmountWillPay ?: 0)
+        binding.totalAmountPaid.text = StringUtils.formatCurrency(totalAmountPaid ?: 0)
         binding.totalLeaves.text = totalLeaves.toString()
         binding.totalDeliveredVolume.text = totalDeliveredVolume.toString()
         binding.totalReceivedVolume.text = totalReceivedVolume.toString()

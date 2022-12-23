@@ -52,7 +52,12 @@ class DateAddFragment : Fragment() {
         val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
         val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
 
-        if (receivedVolumeContent.isNotBlank()) {
+        if (inputCheck(
+                receivedVolumeContent,
+                deliveredLeavesContent,
+                deliveredVolumeContent
+            )
+        ) {
             val nancostData = NancostData(
                 nancostDataUid,
                 args.currentNancost?.nancostUid,
@@ -60,14 +65,16 @@ class DateAddFragment : Fragment() {
                 deliveredLeavesContent.toInt(),
                 deliveredVolumeContent.toDouble()
             )
+            val remainingVolume = nancostData.getRemainingVolume()
+            val amountWillPay = nancostData.getAmountPay()
+            nancostData.remainVolume = remainingVolume
+            nancostData.amountWillPay = amountWillPay
             nancostDataList?.add(nancostData)
             val nancost = Nancost(
                 args.currentNancost?.nancostUid,
                 args.currentNancost?.nancostName,
                 nancostDataList
             )
-            nancostData.getRemainingVolume()
-            nancostData.getAmountPay()
             Firebase.database.getReference("nancost/")
                 .child("${args.currentNancost?.nancostUid}")
                 .setValue(nancost)
@@ -85,5 +92,13 @@ class DateAddFragment : Fragment() {
             binding.tvError.visibility = View.VISIBLE
             binding.tvError.text = getString(R.string.str_register_notice_msg)
         }
+    }
+
+    private fun inputCheck(
+        receivedVolume: String,
+        deliveredLeaves: String,
+        deliveredVolume: String
+    ): Boolean {
+        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank())
     }
 }

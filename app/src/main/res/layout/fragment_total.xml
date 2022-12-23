@@ -65,7 +65,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_total_money"
+                android:id="@+id/layout_total_amout_will_pay"
                 android:padding="@dimen/dp_24"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_marginStart="@dimen/dp_16"
@@ -75,18 +75,49 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_total_money"
+                    android:text="@string/str_total_amout_will_pay"
                     android:layout_gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_12" />
 
                 <TextView
-                    android:id="@+id/total_money"
+                    android:id="@+id/total_amout_will_pay"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    tools:text="9,999,999đ"
+                    tools:text="9,999,999"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_25"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/layout_total_amout_paid"
+                android:padding="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:background="@drawable/bg_border_nancost"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_total_amout_paid"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/total_amount_paid"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    tools:text="9,999,999"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_25"
                     android:textStyle="bold" />

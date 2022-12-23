@@ -32,6 +32,7 @@
                     android:id="@+id/received_volume_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -50,6 +51,7 @@
                     android:id="@+id/delivered_leaves_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,6 +70,7 @@
                     android:id="@+id/delivered_volume_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -129,6 +132,38 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_amount_paid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/str_amount_paid"
+                android:layout_marginTop="@dimen/dp_16"
+                app:layout_constraintTop_toBottomOf="@+id/layout_amount_pay"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amount_paid_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/checkbox_paid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_24"
+                app:layout_constraintTop_toBottomOf="@id/layout_amount_paid"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="@dimen/sp_16"
+                android:textColor="#777"
+                android:buttonTint="@color/main_green"
+                android:text="@string/str_paid" />
+
             <TextView
                 android:id="@+id/tv_error"
                 android:layout_width="wrap_content"
@@ -138,22 +173,10 @@
                 android:lineSpacingExtra="@dimen/sp_12"
                 android:textColor="@color/red"
                 android:visibility="invisible"
-                app:layout_constraintTop_toBottomOf="@id/layout_amount_pay"
+                app:layout_constraintTop_toBottomOf="@id/layout_amount_paid"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="@dimen/sp_12" />
-
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/checkbox_paid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_24"
-                app:layout_constraintTop_toBottomOf="@id/layout_amount_pay"
-                app:layout_constraintStart_toStartOf="parent"
-                android:textSize="@dimen/sp_16"
-                android:textColor="#777"
-                android:buttonTint="@color/main_green"
-                android:text="@string/str_paid" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_update"

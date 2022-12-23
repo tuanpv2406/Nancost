@@ -32,6 +32,9 @@ data class NancostData(
     @SerializedName("amount_will_pay")
     var amountWillPay: Int? = null,
 
+    @SerializedName("amount_paid")
+    var amountPaid: Int? = null,
+
     @SerializedName("is_paid")
     var isPaid: Boolean? = false,
 
@@ -47,13 +50,14 @@ data class NancostData(
         parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readBoolean(),
         parcel.readString(),
     ) {
     }
 
     @JvmName("remainVolume")
-    fun getRemainingVolume() = deliveredVolume?.let { receivedVolume?.minus(it) }
+    fun getRemainingVolume() = deliveredVolume?.let { receivedVolume?.minus(it) } ?: 0.0
 
     @JvmName("amountWillPay")
     fun getAmountPay() = unitPrice?.let { deliveredLeaves?.times(it) }
@@ -65,6 +69,7 @@ data class NancostData(
         parcel.writeValue(remainVolume)
         parcel.writeValue(unitPrice)
         parcel.writeValue(amountWillPay)
+        parcel.writeValue(amountPaid)
         parcel.writeValue(isPaid)
         parcel.writeString(dayAdded)
     }
