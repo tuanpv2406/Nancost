@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.marginStart
 import androidx.navigation.fragment.findNavController
 import com.example.nancost.BuildConfig
@@ -50,6 +51,12 @@ class MenuFragment : Fragment() {
             SharedPreUtils.putBoolean(AppConstant.Enum.HAS_LOGGED_IN, false)
             startActivity(Intent(requireContext(), SplashActivity::class.java))
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_menuFragment_to_listFragment)
+            }
+        })
     }
 
     private fun showChangePriceDialog() {

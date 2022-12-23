@@ -2,6 +2,7 @@ package com.example.nancost.fragments.list
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -81,6 +82,12 @@ class ListFragment : Fragment() {
         binding.btnMenu.setOnClickListener {
             findNavController().navigate(R.id.action_listFragment_to_menuFragment)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        })
     }
 
     private fun filter(e: String?) {
