@@ -24,4 +24,10 @@
     <string name="str_change_price">Thay đổi giá cót</string>
     <string name="version">Nancost version %s</string>
     <string name="str_paid">Đã trả tiền</string>
+    <string name="str_total">Tổng thu chi</string>
+    <string name="str_date_picker">Chọn ngày</string>
+    <string name="str_total_money">Tổng tiền đã trả</string>
+    <string name="str_total_leaves">Tổng số lá cót</string>
+    <string name="str_total_delivered_volume">Tổng khối lượng đã giao</string>
+    <string name="str_total_received_volume">Tổng khối lượng nhận về</string>
 </resources>

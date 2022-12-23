@@ -38,6 +38,9 @@ class MenuFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.layoutTotal.setOnClickListener {
+            findNavController().navigate(R.id.action_menuFragment_to_totalFragment)
+        }
         binding.layoutChangePrice.setOnClickListener {
             showChangePriceDialog()
         }
@@ -46,8 +49,6 @@ class MenuFragment : Fragment() {
             SharedPreUtils.putBoolean(AppConstant.UserLogin.HAS_LOGGED_IN, false)
             startActivity(Intent(requireContext(), SplashActivity::class.java))
         }
-
-
     }
 
     private fun showChangePriceDialog() {

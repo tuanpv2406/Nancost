@@ -84,4 +84,8 @@
         <item name="android:layout_marginLeft">@dimen/dp_24</item>
         <item name="android:layout_marginRight">@dimen/dp_24</item>
     </style>
+
+    <style name="ThemeOverlay.App.DatePicker" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+    </style>
 </resources>

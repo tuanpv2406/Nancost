@@ -82,6 +82,18 @@
         tools:layout="@layout/fragment_menu" >
         <action
             android:id="@+id/action_menuFragment_to_listFragment"
-            app:destination="@id/addFragment" />
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_menuFragment_to_totalFragment"
+            app:destination="@id/totalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/totalFragment"
+        android:name="com.example.nancost.fragments.menu.TotalFragment"
+        android:label="Menu"
+        tools:layout="@layout/fragment_total" >
+        <action
+            android:id="@+id/action_totalFragment_to_menuFragment"
+            app:destination="@id/menuFragment" />
     </fragment>
 </navigation>

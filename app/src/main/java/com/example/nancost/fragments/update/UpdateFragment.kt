@@ -40,26 +40,6 @@ class UpdateFragment : Fragment() {
         binding.deliveredLeavesContent.setText(args.currentNancost?.deliveredLeaves.toString())
         binding.deliveredVolumeContent.setText(args.currentNancost?.deliveredVolume.toString())
 
-        Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        for (ds in snapshot.children) {
-                            val data: NancostData? = ds.getValue(NancostData::class.java)
-                            nancostDataList.add(data)
-                        }
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-        nancostDataList.forEachIndexed { index, item ->
-            if (item?.nancostDataUid == args.currentNancost?.nancostDataUid) {
-                indexMatched = index
-            }
-        }
-
         binding.btnUpdate.setOnClickListener {
             updateItem()
         }
@@ -71,6 +51,25 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (ds in snapshot.children) {
+                            val data: NancostData? = ds.getValue(NancostData::class.java)
+                            nancostDataList.add(data)
+                        }
+                        nancostDataList.forEachIndexed { index, item ->
+                            if (item?.nancostDataUid == args.currentNancost?.nancostDataUid) {
+                                indexMatched = index
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
         binding.remainingVolumeContent.setText(args.currentNancost?.getRemainingVolume().toString())
         binding.unitPriceContent.setText(args.currentNancost?.unitPrice.toString())
         binding.amountPayContent.setText(args.currentNancost?.getAmountPay().toString())
@@ -100,6 +99,12 @@ class UpdateFragment : Fragment() {
 
             Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
                 .setValue(nancostData)
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_LONG).show()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(context, "Cập nhậ thất bại!", Toast.LENGTH_LONG).show()
+                }
 
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         } else {

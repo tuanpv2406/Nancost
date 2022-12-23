@@ -72,7 +72,7 @@ class AddFragment : Fragment() {
                 .child(nancostUid)
                 .setValue(nancost)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Đã thêm thành công!", Toast.LENGTH_LONG).show()
                 }
                 .addOnFailureListener {
                     Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()
