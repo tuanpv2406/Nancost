@@ -48,16 +48,21 @@ class DateAddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAdd.setOnClickListener {
-            ActionDialog.show( childFragmentManager,
-                "Thêm bản ghi mới",
-                "Bạn có chắc chắn thêm bản ghi mới cho ${binding.nameContent.text.toString()}?"
-            ).apply {
-            onNegativeActionListener = {
-                    dismiss()
+            if (binding.receivedVolumeContent.text.toString().isNotBlank()) {
+                ActionDialog.show( childFragmentManager,
+                    "Thêm bản ghi mới",
+                    "Bạn có chắc chắn thêm bản ghi mới cho ${binding.nameContent.text.toString()}?"
+                ).apply {
+                onNegativeActionListener = {
+                        dismiss()
+                    }
+                    onPositiveActionListener = {
+                        insertDataToDatabase()
+                    }
                 }
-                onPositiveActionListener = {
-                    insertDataToDatabase()
-                }
+            } else {
+                binding.tvError.visibility = View.VISIBLE
+                binding.tvError.text = getString(R.string.str_register_notice_msg)
             }
         }
     }
@@ -65,57 +70,35 @@ class DateAddFragment : Fragment() {
     private fun insertDataToDatabase() {
         val nancostDataUid = UUID.randomUUID().toString()
         val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
-        val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
-        val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
 
-        if (inputCheck(
-                receivedVolumeContent,
-                deliveredLeavesContent,
-                deliveredVolumeContent
-            )
-        ) {
-            val nancostData = NancostData(
-                nancostDataUid,
-                args.currentNancost?.nancostUid,
-                receivedVolumeContent.toDouble(),
-                deliveredLeavesContent.toInt(),
-                deliveredVolumeContent.toDouble(),
-                unitPrice = newPrice
-            )
-            val remainingVolume = nancostData.getRemainingVolume()
-            val amountWillPay = nancostData.getAmountPay()
-            nancostData.remainVolume = remainingVolume
-            nancostData.amountWillPay = amountWillPay
-            nancostDataList?.add(nancostData)
-            val nancost = Nancost(
-                args.currentNancost?.nancostUid,
-                args.currentNancost?.nancostName,
-                nancostDataList
-            )
-            Firebase.database.getReference("nancost/")
-                .child("${args.currentNancost?.nancostUid}")
-                .setValue(nancost)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()
-                }
-            lifecycleScope.launch {
-                delay(1000)
-                findNavController().navigate(R.id.action_dateAddFragment_to_listFragment)
+        val nancostData = NancostData(
+            nancostDataUid,
+            args.currentNancost?.nancostUid,
+            receivedVolumeContent.toDouble(),
+            unitPrice = newPrice
+        )
+        val remainingVolume = nancostData.getRemainingVolume()
+        val amountWillPay = nancostData.getAmountPay()
+        nancostData.remainVolume = remainingVolume
+        nancostData.amountWillPay = amountWillPay
+        nancostDataList?.add(nancostData)
+        val nancost = Nancost(
+            args.currentNancost?.nancostUid,
+            args.currentNancost?.nancostName,
+            nancostDataList
+        )
+        Firebase.database.getReference("nancost/")
+            .child("${args.currentNancost?.nancostUid}")
+            .setValue(nancost)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
             }
-        } else {
-            binding.tvError.visibility = View.VISIBLE
-            binding.tvError.text = getString(R.string.str_register_notice_msg)
+            .addOnFailureListener {
+                Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()
+            }
+        lifecycleScope.launch {
+            delay(1000)
+            findNavController().navigate(R.id.action_dateAddFragment_to_listFragment)
         }
-    }
-
-    private fun inputCheck(
-        receivedVolume: String,
-        deliveredLeaves: String,
-        deliveredVolume: String
-    ): Boolean {
-        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank())
     }
 }

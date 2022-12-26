@@ -18,10 +18,10 @@ data class NancostData(
     var receivedVolume: Double? = null,
 
     @SerializedName("delivered_leaves")
-    var deliveredLeaves: Int? = null,
+    var deliveredLeaves: Int? = 0,
 
     @SerializedName("delivered_volume")
-    var deliveredVolume: Double? = null,
+    var deliveredVolume: Double? = 0.0,
 
     @SerializedName("remain_volume")
     var remainVolume: Double? = null,

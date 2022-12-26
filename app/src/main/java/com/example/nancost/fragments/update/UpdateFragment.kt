@@ -94,8 +94,6 @@ class UpdateFragment : Fragment() {
                 binding.deliveredVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
             }
         }
-
-        binding.delete.setOnClickListener { deleteNancost() }
     }
 
     private fun updateItem() {
@@ -147,22 +145,4 @@ class UpdateFragment : Fragment() {
     ): Boolean {
         return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank() && amountPaid.isNotBlank())
     }
-
-    private fun deleteNancost() {
-        ActionDialog.show( childFragmentManager,
-            "Xóa bản ghi",
-            "Bạn có chắc chắn xóa bản ghi này?"
-        ).apply {
-            onNegativeActionListener = {
-                dismiss()
-            }
-            onPositiveActionListener = {
-                Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
-                    .removeValue()
-                Toast.makeText(requireContext(), "Đã xóa thành công!", Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_updateFragment_to_listFragment)
-            }
-        }
-    }
-
 }
