@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_updateFragment_to_listFragment"
             app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_updateFragment_to_dateUpdateFragment"
+            app:destination="@id/dateUpdateFragment" />
         <argument
             android:name="currentNancost"
             app:argType="com.example.nancost.model.NancostData"
@@ -69,6 +72,9 @@
         <action
             android:id="@+id/action_dateAddFragment_to_listFragment"
             app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_dateAddFragment_to_dateUpdateFragment"
+            app:destination="@id/dateUpdateFragment" />
         <argument
             android:name="currentNancost"
             app:argType="com.example.nancost.model.Nancost"

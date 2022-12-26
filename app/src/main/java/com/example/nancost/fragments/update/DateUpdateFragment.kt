@@ -2,6 +2,7 @@ package com.example.nancost.fragments.update
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -81,5 +82,11 @@ class DateUpdateFragment : Fragment() {
                 DateUpdateFragmentDirections.actionDateUpdateFragmentToDateAddFragment(data)
             findNavController().navigate(action)
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_dateUpdateFragment_to_listFragment)
+            }
+        })
     }
 }

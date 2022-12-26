@@ -8,6 +8,13 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.nancost.databinding.ActivityMainBinding
+import com.example.nancost.model.Price
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -30,6 +37,22 @@ class MainActivity : AppCompatActivity() {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
         setupActionBar(navController, appBarConfiguration)
+
+        FirebaseDatabase.getInstance().getReference("price/")
+            .addListenerForSingleValueEvent(object: ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val price = snapshot.getValue(Price:: class.java)
+                        price?.newPrice?.let { newPrice ->
+                            SharedPreUtils.putInt(AppConstant.Enum.NEW_PRICE, newPrice)
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
     }
 
     private fun setupActionBar(
@@ -41,15 +64,5 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-    }
-
-    override fun onBackPressed() {
-        val count = supportFragmentManager.backStackEntryCount
-        if (count == 0) {
-            super.onBackPressed()
-            //additional code
-        } else {
-            supportFragmentManager.popBackStack()
-        }
     }
 }

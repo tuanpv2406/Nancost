@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.navigation.fragment.findNavController
 import androidx.room.util.StringUtil
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentTotalBinding
@@ -88,6 +90,12 @@ class TotalFragment : Fragment() {
                 // Respond to dismiss events.
             }
         }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_totalFragment_to_menuFragment)
+            }
+        })
     }
 
     private fun totalPerDay(date: String) {
