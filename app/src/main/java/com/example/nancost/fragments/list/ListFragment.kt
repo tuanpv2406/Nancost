@@ -2,11 +2,15 @@ package com.example.nancost.fragments.list
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentListBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -28,9 +32,6 @@ class ListFragment : Fragment() {
     ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val view = binding.root
-        val recyclerView = binding.recyclerView
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         Firebase.database.getReference("nancost/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -40,7 +41,8 @@ class ListFragment : Fragment() {
                             val nancost: Nancost? = ds.getValue(Nancost::class.java)
                             val nancostIterator = nancostList.iterator()
                             if (nancostIterator.hasNext()) {
-                                if (nancostIterator.next()?.nancostUid == nancost?.nancostUid) return
+                                if (nancostIterator.next()?.nancostUid == nancost?.nancostUid)
+                                    return
                                 else {
                                     nancostList.add(nancost)
                                 }
@@ -54,8 +56,32 @@ class ListFragment : Fragment() {
 
                 override fun onCancelled(error: DatabaseError) {
                 }
-
             })
+
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+            ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT
+            ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
         return view
     }
 

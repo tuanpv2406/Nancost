@@ -5,10 +5,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.nancost.R
+import androidx.recyclerview.widget.RecyclerView
 import com.example.nancost.databinding.FragmentDateUpdateBinding
-import com.example.nancost.fragments.list.ListFragmentDirections
 import com.example.nancost.model.NancostData
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -27,16 +27,12 @@ class DateUpdateFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDateUpdateBinding.inflate(inflater, container, false)
-        val view = binding.root
-        val recyclerView = binding.recyclerView
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
+        val nancostDataList: ArrayList<NancostData?> = arrayListOf()
         Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        val nancostDataList: ArrayList<NancostData?> = arrayListOf()
                         for (ds in snapshot.children) {
                             val nancostData: NancostData? = ds.getValue(NancostData::class.java)
                             nancostDataList.add(nancostData)
@@ -48,7 +44,33 @@ class DateUpdateFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-        return view
+
+        val recyclerView = binding.recyclerView
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+            ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT
+            ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
+                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager, nancostDataList)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

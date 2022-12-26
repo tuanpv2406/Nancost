@@ -2,10 +2,19 @@ package com.example.nancost.fragments.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.nancost.R
 import com.example.nancost.databinding.RowItemBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+
 
 class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
 
@@ -42,4 +51,25 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         this.nancostList = nancostList
         notifyDataSetChanged()
     }
+
+    fun removeNancostAt(position: Int, fragmentManager: FragmentManager) {
+        ActionDialog.show(fragmentManager,
+            "Xóa",
+            "Bạn có chắc chắn xóa ${nancostList[position]?.nancostName}?"
+        ).apply {
+            onNegativeActionListener = {
+                notifyDataSetChanged()
+                dismiss()
+            }
+            onPositiveActionListener = {
+                Firebase.database.getReference("nancost/${nancostList[position]?.nancostUid}")
+                    .removeValue()
+                nancostList.removeAt(position)
+                notifyDataSetChanged()
+                dismiss()
+                Toast.makeText(requireContext(), "Đã xóa thành công!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 }

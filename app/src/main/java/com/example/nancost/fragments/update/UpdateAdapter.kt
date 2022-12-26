@@ -2,11 +2,16 @@ package com.example.nancost.fragments.update
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.nancost.R
 import com.example.nancost.databinding.UpdateItemBinding
+import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.NancostData
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -60,5 +65,32 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
 
         this.nancostList = result
         notifyDataSetChanged()
+    }
+
+    fun removeNancostAt(position: Int, fragmentManager: FragmentManager, nancostDataList: ArrayList<NancostData?>) {
+        ActionDialog.show(fragmentManager,
+            "Xóa",
+            "Bạn có chắc chắn xóa bản ghi này?"
+        ).apply {
+            var indexMatched = 0
+            nancostDataList.forEachIndexed { index, item ->
+                if (item?.nancostDataUid == nancostList[position]?.nancostDataUid) {
+                    indexMatched = index
+                }
+            }
+            onNegativeActionListener = {
+                notifyDataSetChanged()
+                dismiss()
+            }
+            onPositiveActionListener = {
+                Firebase.database.getReference("nancost/${nancostList[position]?.nancostUid}/nancostDataList/$indexMatched")
+                    .removeValue()
+                nancostDataList.removeAt(position)
+                nancostList = nancostDataList
+                notifyDataSetChanged()
+                dismiss()
+                Toast.makeText(requireContext(), "Đã xóa thành công!", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
