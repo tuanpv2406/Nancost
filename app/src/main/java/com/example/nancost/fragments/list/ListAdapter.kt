@@ -52,7 +52,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun removeNancostAt(position: Int, fragmentManager: FragmentManager) {
+    fun removeNancostAt(position: Int, fragmentManager: FragmentManager, userUid: String?) {
         ActionDialog.show(fragmentManager,
             "Xóa",
             "Bạn có chắc chắn xóa ${nancostList[position]?.nancostName}?"
@@ -62,7 +62,7 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
                 dismiss()
             }
             onPositiveActionListener = {
-                Firebase.database.getReference("nancost/${nancostList[position]?.nancostUid}")
+                Firebase.database.getReference("$userUid/nancost/${nancostList[position]?.nancostUid}")
                     .removeValue()
                 nancostList.removeAt(position)
                 notifyDataSetChanged()

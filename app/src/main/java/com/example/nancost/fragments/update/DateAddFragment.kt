@@ -68,6 +68,8 @@ class DateAddFragment : Fragment() {
     }
 
     private fun insertDataToDatabase() {
+        val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+
         val nancostDataUid = UUID.randomUUID().toString()
         val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
 
@@ -87,7 +89,7 @@ class DateAddFragment : Fragment() {
             args.currentNancost?.nancostName,
             nancostDataList
         )
-        Firebase.database.getReference("nancost/")
+        Firebase.database.getReference("$userUid/nancost/")
             .child("${args.currentNancost?.nancostUid}")
             .setValue(nancost)
             .addOnSuccessListener {

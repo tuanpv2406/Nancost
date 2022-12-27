@@ -9,6 +9,7 @@ import at.favre.lib.crypto.bcrypt.BCrypt
 import com.example.nancost.databinding.ActivityRegisterBinding
 import com.example.nancost.model.User
 import com.google.firebase.database.FirebaseDatabase
+import java.util.*
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var binding: ActivityRegisterBinding
@@ -31,7 +32,11 @@ class RegisterActivity : AppCompatActivity() {
                 binding.tvErrorRegister.text = getString(R.string.str_match_password)
             } else {
                 val passHashed = BCrypt.withDefaults().hashToString(12, password.toCharArray())
-                val user = User(username, passHashed)
+                val user = User(
+                    username = username,
+                    password = passHashed,
+                    userUid = UUID.randomUUID().toString()
+                )
                 FirebaseDatabase.getInstance().getReference("hash/login/$username/").setValue(user)
                     .addOnSuccessListener {
                         binding.tvErrorRegister.setTextColor(R.color.black)

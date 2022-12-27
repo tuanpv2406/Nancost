@@ -38,7 +38,9 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBar(navController, appBarConfiguration)
 
-        FirebaseDatabase.getInstance().getReference("price/")
+        val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+
+        FirebaseDatabase.getInstance().getReference("$userUid/price/")
             .addListenerForSingleValueEvent(object: ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {

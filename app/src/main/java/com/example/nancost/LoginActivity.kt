@@ -47,6 +47,8 @@ class LoginActivity : AppCompatActivity() {
                             val result =
                                 BCrypt.verifyer().verify(password.toCharArray(), passHashed)
                             if (result.verified) {
+                                val userUid = snapshot.child("userUid").value.toString()
+                                SharedPreUtils.putString(AppConstant.Enum.USER_UID, userUid)
                                 startActivity(Intent(this@LoginActivity, MainActivity::class.java))
                                 binding.tvErrorLogin.setTextColor(R.color.black)
                                 binding.tvErrorLogin.text = getString(R.string.str_login_notice_msg)

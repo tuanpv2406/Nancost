@@ -16,6 +16,8 @@ import com.example.nancost.databinding.FragmentUpdateBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
 import com.example.nancost.utils.StringUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -33,12 +35,14 @@ class UpdateFragment : Fragment() {
     private val binding get() = _binding!!
     private val nancostDataList: ArrayList<NancostData?> = arrayListOf()
     private var indexMatched = 0
+    var userUid: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUpdateBinding.inflate(inflater, container, false)
         val view = binding.root
+        userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
 
         binding.receivedVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
         binding.deliveredLeavesContent.setText(args.currentNancost?.deliveredLeaves.toString())
@@ -65,7 +69,7 @@ class UpdateFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
+        Firebase.database.getReference("$userUid/nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -124,7 +128,7 @@ class UpdateFragment : Fragment() {
             nancostData.remainVolume = remainingVolume
             nancostData.amountWillPay = amountWillPay
 
-            Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
+            Firebase.database.getReference("$userUid/nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
                 .setValue(nancostData)
                 .addOnSuccessListener {
                     Toast.makeText(context, "Cập nhật thành công!", Toast.LENGTH_LONG).show()

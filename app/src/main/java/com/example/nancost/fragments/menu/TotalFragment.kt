@@ -11,6 +11,8 @@ import androidx.room.util.StringUtil
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentTotalBinding
 import com.example.nancost.model.Nancost
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
 import com.example.nancost.utils.StringUtils
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.firebase.database.DataSnapshot
@@ -35,7 +37,9 @@ class TotalFragment : Fragment() {
     ): View {
         _binding = FragmentTotalBinding.inflate(inflater, container, false)
 
-        Firebase.database.getReference("nancost/")
+        val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+
+        Firebase.database.getReference("$userUid/nancost/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {

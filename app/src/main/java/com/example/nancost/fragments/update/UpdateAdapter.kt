@@ -67,7 +67,7 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun removeNancostAt(position: Int, fragmentManager: FragmentManager, nancostDataList: ArrayList<NancostData?>) {
+    fun removeNancostAt(position: Int, fragmentManager: FragmentManager, nancostDataList: ArrayList<NancostData?>, userUid: String?) {
         ActionDialog.show(fragmentManager,
             "Xóa",
             "Bạn có chắc chắn xóa bản ghi này?"
@@ -83,7 +83,7 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
                 dismiss()
             }
             onPositiveActionListener = {
-                Firebase.database.getReference("nancost/${nancostList[position]?.nancostUid}/nancostDataList/$indexMatched")
+                Firebase.database.getReference("$userUid/nancost/${nancostList[position]?.nancostUid}/nancostDataList/$indexMatched")
                     .removeValue()
                 nancostDataList.removeAt(position)
                 nancostList = nancostDataList

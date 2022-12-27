@@ -65,7 +65,8 @@ class ActionDialog : DialogFragment() {
             onPositiveActionListener?.invoke()
             if (isNewPrice == true) {
                 val price = Price(binding.newPriceContent.text.toString().toInt())
-                FirebaseDatabase.getInstance().getReference("price/").setValue(price)
+                val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+                FirebaseDatabase.getInstance().getReference("$userUid/price/").setValue(price)
                     .addOnSuccessListener {
                         price.newPrice?.let { newPrice ->
                             SharedPreUtils.putInt(AppConstant.Enum.NEW_PRICE, newPrice)

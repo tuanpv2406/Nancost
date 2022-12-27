@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentDateUpdateBinding
 import com.example.nancost.model.NancostData
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -30,8 +32,10 @@ class DateUpdateFragment : Fragment() {
     ): View {
         _binding = FragmentDateUpdateBinding.inflate(inflater, container, false)
 
+        val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+
         val nancostDataList: ArrayList<NancostData?> = arrayListOf()
-        Firebase.database.getReference("nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
+        Firebase.database.getReference("$userUid/nancost/${args.currentNancost?.nancostUid}/nancostDataList/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -65,7 +69,7 @@ class DateUpdateFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager, nancostDataList)
+                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager, nancostDataList, userUid)
             }
         }
 

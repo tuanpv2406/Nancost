@@ -13,6 +13,8 @@ import com.example.nancost.R
 import com.example.nancost.databinding.FragmentListBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
+import com.example.nancost.utils.AppConstant
+import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -34,7 +36,9 @@ class ListFragment : Fragment() {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        Firebase.database.getReference("nancost/")
+        val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
+
+        Firebase.database.getReference("$userUid/nancost/")
             .addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
@@ -77,7 +81,7 @@ class ListFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager)
+                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager, userUid)
             }
         }
 
