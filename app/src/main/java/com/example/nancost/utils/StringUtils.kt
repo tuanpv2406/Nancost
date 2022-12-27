@@ -8,4 +8,8 @@ object StringUtils {
         val formatter: NumberFormat = DecimalFormat("#,###")
         return formatter.format(currency)
     }
+
+    fun currencyToString(currency: String): String {
+        return currency.replace(",", "")
+    }
 }

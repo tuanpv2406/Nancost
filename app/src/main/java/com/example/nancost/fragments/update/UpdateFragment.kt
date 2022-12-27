@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.room.util.StringUtil
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentUpdateBinding
 import com.example.nancost.fragments.dialog.ActionDialog
@@ -100,7 +101,8 @@ class UpdateFragment : Fragment() {
         val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
         val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
         val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
-        val amountPaidContent = binding.amountPaidContent.text.toString()
+        val unitPrice = args.currentNancost?.unitPrice
+        val amountPaidContent = StringUtils.currencyToString(binding.amountPaidContent.text.toString())
         val isPaid = binding.checkboxPaid.isChecked
 
         if (inputCheck(
@@ -113,6 +115,7 @@ class UpdateFragment : Fragment() {
                 receivedVolumeContent.toDouble(),
                 deliveredLeavesContent.toInt(),
                 deliveredVolumeContent.toDouble(),
+                unitPrice = unitPrice,
                 amountPaid = amountPaidContent.toInt(),
                 isPaid = isPaid
             )
