@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.update.DateAddFragment">
+    tools:context=".fragments.add.AddVolumeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -26,28 +26,11 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_received_volume"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/str_received_volume"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/received_volume_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="numberDecimal"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_delivered_leaves"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/str_delivered_leaves"
+                    android:enabled="false"
                     android:layout_marginTop="@dimen/dp_16"
                     app:layout_constraintTop_toBottomOf="@id/layout_received_volume"
                     app:layout_constraintStart_toStartOf="parent"
@@ -67,6 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/str_delivered_volume"
+                    android:enabled="false"
                     android:layout_marginTop="@dimen/dp_16"
                     app:layout_constraintTop_toBottomOf="@id/layout_delivered_leaves"
                     app:layout_constraintStart_toStartOf="parent"
@@ -82,32 +66,13 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/layout_remaining_volume"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/str_remaining_volume"
-                    android:enabled="false"
-                    android:layout_marginTop="@dimen/dp_16"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_delivered_volume"
-                    app:layout_constraintStart_toStartOf="parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/remaining_volume_content"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/layout_unit_price"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/str_unit_price"
                     android:enabled="false"
                     android:layout_marginTop="@dimen/dp_16"
-                    app:layout_constraintTop_toBottomOf="@+id/layout_remaining_volume"
+                    app:layout_constraintTop_toBottomOf="@+id/layout_delivered_volume"
                     app:layout_constraintStart_toStartOf="parent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
@@ -157,18 +122,6 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.checkbox.MaterialCheckBox
-                    android:id="@+id/checkbox_paid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_24"
-                    app:layout_constraintTop_toBottomOf="@id/layout_amount_paid"
-                    app:layout_constraintStart_toStartOf="parent"
-                    android:textSize="@dimen/sp_16"
-                    android:textColor="#777"
-                    android:buttonTint="@color/main_green"
-                    android:text="@string/str_paid" />
-
                 <TextView
                     android:id="@+id/tv_error"
                     android:layout_width="wrap_content"
@@ -185,12 +138,11 @@
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btn_update"
-                    app:layout_constraintTop_toBottomOf="@id/checkbox_paid"
+                    app:layout_constraintTop_toBottomOf="@id/tv_error"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:layout_width="@dimen/dp_192"
                     android:layout_height="@dimen/dp_55"
-                    android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:backgroundTint="@color/main_green"
                     android:clickable="false"

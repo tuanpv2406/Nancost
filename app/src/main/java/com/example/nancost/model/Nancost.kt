@@ -11,12 +11,20 @@ data class Nancost(
     @SerializedName("nancost_name")
     var nancostName: String? = null,
 
+    @SerializedName("remain_volume")
+    var remainVolume: Double? = null,
+
+    @SerializedName("received_volume")
+    var receivedVolume: Double? = null,
+
     @SerializedName("nancost_data")
     var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
+        parcel.readValue(Double::class.java.classLoader) as? Double,
+        parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.createTypedArrayList(NancostData)
     ) {
     }

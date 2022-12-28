@@ -38,8 +38,7 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
                 if (currentItem.amountPaid == null || currentItem.amountPaid == 0) {
                     binding.rowLayout.setBackgroundResource(R.drawable.bg_unpaid)
                 } else {
-                    if (((currentItem.receivedVolume ?: 0.0) > (currentItem.deliveredVolume ?: 0.0))
-                        || (currentItem.amountWillPay ?: 0) > (currentItem.amountPaid ?: 0)) {
+                    if ((currentItem.amountWillPay ?: 0) > (currentItem.amountPaid ?: 0)) {
                         binding.rowLayout.setBackgroundResource(R.drawable.bg_not_enough_volume)
                     } else {
                         binding.rowLayout.setBackgroundResource(R.drawable.bg_paid)
@@ -67,7 +66,13 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
         notifyDataSetChanged()
     }
 
-    fun removeNancostAt(position: Int, fragmentManager: FragmentManager, nancostDataList: ArrayList<NancostData?>, userUid: String?) {
+    fun removeNancostAt(
+        position: Int,
+        fragmentManager: FragmentManager,
+        nancostDataList: ArrayList<NancostData?>,
+        userUid: String?,
+        remainVolume: Double?
+    ) {
         ActionDialog.show(fragmentManager,
             "Xóa",
             "Bạn có chắc chắn xóa bản ghi này?"
@@ -85,6 +90,12 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
             onPositiveActionListener = {
                 Firebase.database.getReference("$userUid/nancost/${nancostList[position]?.nancostUid}/nancostDataList/$indexMatched")
                     .removeValue()
+
+                Firebase.database.getReference("$userUid/nancost/")
+                    .child("${nancostList[position]?.nancostUid}")
+                    .child("remainVolume")
+                    .setValue(nancostList[position]?.deliveredVolume?.let { remainVolume?.plus(it) })
+
                 nancostDataList.removeAt(position)
                 nancostList = nancostDataList
                 notifyDataSetChanged()

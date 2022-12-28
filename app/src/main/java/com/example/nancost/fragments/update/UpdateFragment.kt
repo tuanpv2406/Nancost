@@ -44,7 +44,6 @@ class UpdateFragment : Fragment() {
         val view = binding.root
         userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
 
-        binding.receivedVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
         binding.deliveredLeavesContent.setText(args.currentNancost?.deliveredLeaves.toString())
         binding.deliveredVolumeContent.setText(args.currentNancost?.deliveredVolume.toString())
 
@@ -88,45 +87,27 @@ class UpdateFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
-        binding.remainingVolumeContent.setText(args.currentNancost?.remainVolume.toString())
         binding.unitPriceContent.setText(StringUtils.formatCurrency(args.currentNancost?.unitPrice ?: 0))
         binding.amountPayContent.setText(StringUtils.formatCurrency(args.currentNancost?.amountWillPay?: 0))
         binding.amountPaidContent.setText(StringUtils.formatCurrency((args.currentNancost?.amountPaid ?: 0)))
-        binding.checkboxPaid.isChecked = args.currentNancost?.isPaid == true
-
-        binding.checkboxPaid.setOnClickListener {
-            if (binding.checkboxPaid.isChecked) {
-                binding.deliveredVolumeContent.setText(args.currentNancost?.receivedVolume.toString())
-            }
-        }
     }
 
     private fun updateItem() {
-        val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
         val deliveredLeavesContent = binding.deliveredLeavesContent.text.toString()
         val deliveredVolumeContent = binding.deliveredVolumeContent.text.toString()
         val unitPrice = args.currentNancost?.unitPrice
         val amountPaidContent = StringUtils.currencyToString(binding.amountPaidContent.text.toString())
-        val isPaid = binding.checkboxPaid.isChecked
 
-        if (inputCheck(
-                receivedVolumeContent, deliveredLeavesContent, deliveredVolumeContent, amountPaidContent
-            )
-        ) {
+        if (inputCheck(deliveredLeavesContent, deliveredVolumeContent, amountPaidContent)) {
             val nancostData = NancostData(
-                args.currentNancost?.nancostDataUid,
-                args.currentNancost?.nancostUid,
-                receivedVolumeContent.toDouble(),
-                deliveredLeavesContent.toInt(),
-                deliveredVolumeContent.toDouble(),
+                nancostDataUid = args.currentNancost?.nancostDataUid,
+                nancostUid = args.currentNancost?.nancostUid,
+                deliveredLeaves = deliveredLeavesContent.toInt(),
+                deliveredVolume = deliveredVolumeContent.toDouble(),
                 unitPrice = unitPrice,
-                amountPaid = amountPaidContent.toInt(),
-                isPaid = isPaid
+                amountPaid = amountPaidContent.toInt()
             )
-            val remainingVolume = nancostData.getRemainingVolume()
-            val amountWillPay = nancostData.getAmountPay()
-            nancostData.remainVolume = remainingVolume
-            nancostData.amountWillPay = amountWillPay
+            nancostData.amountWillPay = nancostData.getAmountPay()
 
             Firebase.database.getReference("$userUid/nancost/${args.currentNancost?.nancostUid}/nancostDataList/${indexMatched}")
                 .setValue(nancostData)
@@ -145,11 +126,10 @@ class UpdateFragment : Fragment() {
     }
 
     private fun inputCheck(
-        receivedVolume: String,
         deliveredLeaves: String,
         deliveredVolume: String,
         amountPaid: String
     ): Boolean {
-        return (receivedVolume.isNotBlank() && deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank() && amountPaid.isNotBlank())
+        return (deliveredLeaves.isNotBlank() && deliveredVolume.isNotBlank() && amountPaid.isNotBlank())
     }
 }

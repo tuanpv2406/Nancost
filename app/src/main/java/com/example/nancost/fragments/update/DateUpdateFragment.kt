@@ -55,7 +55,7 @@ class DateUpdateFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
             ItemTouchHelper.SimpleCallback(
                 0,
                 ItemTouchHelper.LEFT
@@ -69,7 +69,13 @@ class DateUpdateFragment : Fragment() {
             }
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
-                adapter.removeNancostAt(viewHolder.adapterPosition, childFragmentManager, nancostDataList, userUid)
+                adapter.removeNancostAt(
+                    viewHolder.adapterPosition,
+                    childFragmentManager,
+                    nancostDataList,
+                    userUid,
+                    args.currentNancost?.remainVolume
+                )
             }
         }
 

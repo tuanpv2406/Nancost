@@ -14,17 +14,11 @@ data class NancostData(
     @SerializedName("nancost_id")
     var nancostUid: String? = null,
 
-    @SerializedName("received_volume")
-    var receivedVolume: Double? = null,
-
     @SerializedName("delivered_leaves")
     var deliveredLeaves: Int? = 0,
 
     @SerializedName("delivered_volume")
     var deliveredVolume: Double? = 0.0,
-
-    @SerializedName("remain_volume")
-    var remainVolume: Double? = null,
 
     @SerializedName("unit_price")
     var unitPrice: Int? = 8000,
@@ -35,42 +29,30 @@ data class NancostData(
     @SerializedName("amount_paid")
     var amountPaid: Int? = null,
 
-    @SerializedName("is_paid")
-    var isPaid: Boolean? = false,
-
     @SuppressLint("SimpleDateFormat") @SerializedName("day_added")
     var dayAdded: String? = SimpleDateFormat("dd/MM/yyyy").format(Date())
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
-        parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Double::class.java.classLoader) as? Double,
-        parcel.readValue(Double::class.java.classLoader) as? Double,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
-        parcel.readBoolean(),
         parcel.readString(),
-    ) {
-    }
-
-    @JvmName("remainVolume")
-    fun getRemainingVolume() = deliveredVolume?.let { receivedVolume?.minus(it) } ?: 0.0
+    )
 
     @JvmName("amountWillPay")
     fun getAmountPay() = unitPrice?.let { deliveredLeaves?.times(it) }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(nancostDataUid)
-        parcel.writeValue(receivedVolume)
         parcel.writeValue(deliveredLeaves)
         parcel.writeValue(deliveredVolume)
-        parcel.writeValue(remainVolume)
         parcel.writeValue(unitPrice)
         parcel.writeValue(amountWillPay)
         parcel.writeValue(amountPaid)
-        parcel.writeValue(isPaid)
         parcel.writeString(dayAdded)
     }
 

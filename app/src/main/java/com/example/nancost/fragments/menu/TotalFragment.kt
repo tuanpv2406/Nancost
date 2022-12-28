@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.navigation.fragment.findNavController
-import androidx.room.util.StringUtil
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentTotalBinding
 import com.example.nancost.model.Nancost
+import com.example.nancost.model.NancostVolume
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
 import com.example.nancost.utils.StringUtils
@@ -30,6 +30,7 @@ class TotalFragment : Fragment() {
     private var _binding: FragmentTotalBinding? = null
     private val binding get() = _binding!!
     val nancostList: ArrayList<Nancost?> = arrayListOf()
+    val nancostVolumeList: ArrayList<NancostVolume?> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,6 +54,30 @@ class TotalFragment : Fragment() {
                                 }
                             } else {
                                 nancostList.add(nancost)
+                            }
+                        }
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+
+            })
+
+        Firebase.database.getReference("$userUid/nancostVolume/")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (ds in snapshot.children) {
+                            val nancostVolume: NancostVolume? = ds.getValue(NancostVolume::class.java)
+                            val nancostIterator = nancostVolumeList.iterator()
+                            if (nancostIterator.hasNext()) {
+                                if (nancostIterator.next()?.nancostUid == nancostVolume?.nancostUid) return
+                                else {
+                                    nancostVolumeList.add(nancostVolume)
+                                }
+                            } else {
+                                nancostVolumeList.add(nancostVolume)
                             }
                         }
                     }
@@ -114,8 +139,14 @@ class TotalFragment : Fragment() {
                     totalAmountWillPay = totalAmountWillPay?.plus(it?.amountWillPay?: 0)
                     totalAmountPaid = totalAmountPaid?.plus(it?.amountPaid?: 0)
                     totalLeaves = totalLeaves?.plus(it?.deliveredLeaves?: 0)
-                    totalDeliveredVolume = totalDeliveredVolume?.plus(it?.receivedVolume?: 0.0)
                     totalReceivedVolume = totalReceivedVolume?.plus(it?.deliveredVolume?: 0.0)
+                }
+            }
+        }
+        nancostVolumeList.forEach { nancostVolume ->
+            nancostVolume?.volumeList?.forEach {
+                if (it?.dayAdded.equals(date)) {
+                    totalDeliveredVolume = totalDeliveredVolume?.plus(it?.receivedVolume ?: 0.0)
                 }
             }
         }

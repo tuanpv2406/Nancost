@@ -1,4 +1,4 @@
-package com.example.nancost.fragments.update
+package com.example.nancost.fragments.add
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,10 +10,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.nancost.R
-import com.example.nancost.databinding.FragmentDateAddBinding
+import com.example.nancost.databinding.FragmentAddVolumeBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
+import com.example.nancost.model.NancostVolume
+import com.example.nancost.model.VolumeList
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.ktx.database
@@ -23,21 +25,23 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 
-class DateAddFragment : Fragment() {
-    private var _binding: FragmentDateAddBinding? = null
+class AddVolumeFragment : Fragment() {
+    private var _binding: FragmentAddVolumeBinding? = null
     private val binding get() = _binding!!
     private var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
-    private val args by navArgs<DateAddFragmentArgs>()
+    private val args by navArgs<AddVolumeFragmentArgs>()
     private var newPrice: Int? = 0
+    private var volumeList: ArrayList<VolumeList?>? = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDateAddBinding.inflate(inflater, container, false)
+        _binding = FragmentAddVolumeBinding.inflate(inflater, container, false)
         val view = binding.root
         args.currentNancost?.nancostName?.let { binding.nameContent.setText(it) }
         nancostDataList = args.currentNancost?.nancostDataList
+        volumeList = args.nancostVolume?.volumeList
         newPrice = SharedPreUtils.getInt(AppConstant.Enum.NEW_PRICE, 0)
         return view
     }
@@ -45,13 +49,12 @@ class DateAddFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.btnAdd.setOnClickListener {
-            if (binding.deliveredLeavesContent.text.toString().isNotBlank() &&
-                    binding.deliveredVolumeContent.text.toString().isNotBlank()) {
+            if (binding.receivedVolumeContent.text.toString().isNotBlank()) {
                 ActionDialog.show( childFragmentManager,
-                    "Thêm bản ghi mới",
-                    "Bạn có chắc chắn thêm bản ghi mới cho ${binding.nameContent.text.toString()}?"
+                    "Thêm khối lượng",
+                    "Bạn có chắc chắn thêm ${binding.receivedVolumeContent.text.toString()} kg cho ${binding.nameContent.text.toString()}?"
                 ).apply {
-                onNegativeActionListener = {
+                    onNegativeActionListener = {
                         dismiss()
                     }
                     onPositiveActionListener = {
@@ -68,37 +71,35 @@ class DateAddFragment : Fragment() {
     private fun insertDataToDatabase() {
         val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
 
-        val nancostDataUid = UUID.randomUUID().toString()
-        val deliveredLeaves = binding.deliveredLeavesContent.text.toString().toInt()
-        val deliveredVolume = binding.deliveredVolumeContent.text.toString().toDouble()
+        val receivedVolumeContent = binding.receivedVolumeContent.text.toString().toDouble()
 
-        val nancostData = NancostData(
-            nancostDataUid = nancostDataUid,
-            nancostUid = args.currentNancost?.nancostUid,
-            deliveredLeaves = deliveredLeaves,
-            deliveredVolume = deliveredVolume,
-            unitPrice = newPrice
+        val volume = VolumeList(
+            receivedVolume = receivedVolumeContent
         )
-        nancostData.amountWillPay = nancostData.getAmountPay()
-        nancostDataList?.add(nancostData)
-        val nancost = Nancost(
+        volumeList?.add(volume)
+        val nancostVolume = NancostVolume(
             nancostUid = args.currentNancost?.nancostUid,
-            nancostName = args.currentNancost?.nancostName,
-            remainVolume = args.currentNancost?.remainVolume?.minus(deliveredVolume),
-            nancostDataList = nancostDataList
+            volumeList = volumeList
         )
+
         Firebase.database.getReference("$userUid/nancost/")
             .child("${args.currentNancost?.nancostUid}")
-            .setValue(nancost)
+            .child("remainVolume")
+            .setValue(args.currentNancost?.remainVolume?.plus(receivedVolumeContent))
+
+        Firebase.database.getReference("$userUid/nancostVolume/")
+            .child("${args.currentNancost?.nancostUid}")
+            .setValue(nancostVolume)
             .addOnSuccessListener {
-                Toast.makeText(context, "Đã  thêm thành công!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Đã thêm thành công!", Toast.LENGTH_LONG).show()
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()
             }
+
         lifecycleScope.launch {
             delay(1000)
-            findNavController().navigate(R.id.action_dateAddFragment_to_listFragment)
+            findNavController().navigate(R.id.action_addVolumeFragment_to_listFragment)
         }
     }
 }

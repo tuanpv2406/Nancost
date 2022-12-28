@@ -17,6 +17,8 @@ import com.example.nancost.databinding.FragmentAddBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
 import com.example.nancost.model.NancostData
+import com.example.nancost.model.NancostVolume
+import com.example.nancost.model.VolumeList
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.FirebaseDatabase
@@ -34,6 +36,7 @@ class AddFragment : Fragment() {
     private val binding get() = _binding!!
     private var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
     private var newPrice: Int? = 0
+    private var volumeList: ArrayList<VolumeList?>? = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,31 +83,35 @@ class AddFragment : Fragment() {
     private fun insertDataToDatabase() {
         val userUid = SharedPreUtils.getString(AppConstant.Enum.USER_UID)
         val nancostUid = UUID.randomUUID().toString()
-        val nancostDataUid = UUID.randomUUID().toString()
         val nameContent = binding.nameContent.text.toString()
         val receivedVolumeContent = binding.receivedVolumeContent.text.toString()
 
-        val nancostData = NancostData(
-            nancostDataUid,
-            nancostUid,
-            receivedVolumeContent.toDouble(),
-            unitPrice = newPrice
-        )
-        val remainingVolume = nancostData.getRemainingVolume()
-        val amountWillPay = nancostData.getAmountPay()
-        nancostData.remainVolume = remainingVolume
-        nancostData.amountWillPay = amountWillPay
-        nancostDataList?.add(nancostData)
         val nancost = Nancost(
-            nancostUid,
-            nameContent,
-            nancostDataList
+            nancostUid = nancostUid,
+            nancostName = nameContent,
+            remainVolume = receivedVolumeContent.toDouble()
+        )
+        val volume = VolumeList(
+            receivedVolume = receivedVolumeContent.toDouble()
+        )
+        volumeList?.add(volume)
+        val nancostVolume = NancostVolume(
+            nancostUid = nancostUid,
+            volumeList = volumeList
         )
         Firebase.database.getReference("$userUid/nancost/")
             .child(nancostUid)
             .setValue(nancost)
             .addOnSuccessListener {
-                Toast.makeText(context, "Đã thêm thành công!", Toast.LENGTH_LONG).show()
+                Firebase.database.getReference("$userUid/nancostVolume/")
+                    .child(nancostUid)
+                    .setValue(nancostVolume)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Đã thêm thành công!", Toast.LENGTH_LONG).show()
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()
+                    }
             }
             .addOnFailureListener {
                 Toast.makeText(context, "Thêm thất bại!", Toast.LENGTH_LONG).show()

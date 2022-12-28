@@ -13,6 +13,7 @@ import com.example.nancost.R
 import com.example.nancost.databinding.FragmentListBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
+import com.example.nancost.model.NancostVolume
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
 import com.google.firebase.database.DataSnapshot
@@ -28,6 +29,7 @@ class ListFragment : Fragment() {
     private val binding get() = _binding!!
     val nancostList: ArrayList<Nancost?> = arrayListOf()
     val adapter = ListAdapter()
+    val volumeList: ArrayList<NancostVolume?> = arrayListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,11 +65,36 @@ class ListFragment : Fragment() {
                 }
             })
 
+        Firebase.database.getReference("$userUid/nancostVolume/")
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        for (ds in snapshot.children) {
+                            val nancostVolume: NancostVolume? = ds.getValue(NancostVolume::class.java)
+                            val nancostVolumeIterator = volumeList.iterator()
+                            if (nancostVolumeIterator.hasNext()) {
+                                if (nancostVolumeIterator.next()?.nancostUid == nancostVolume?.nancostUid)
+                                    return
+                                else {
+                                    volumeList.add(nancostVolume)
+                                }
+                            } else {
+                                volumeList.add(nancostVolume)
+                            }
+                        }
+                        adapter.setData(nancostList, volumeList)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
+
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        var simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
+        val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
             ItemTouchHelper.SimpleCallback(
                 0,
                 ItemTouchHelper.LEFT

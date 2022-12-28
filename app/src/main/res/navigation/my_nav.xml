@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_listFragment_to_menuFragment"
             app:destination="@id/menuFragment" />
+        <action
+            android:id="@+id/action_listFragment_to_addVolumeFragment"
+            app:destination="@id/addVolumeFragment" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
@@ -64,6 +67,29 @@
             app:nullable="true"
             android:defaultValue="@null"/>
     </fragment>
+    <fragment
+        android:id="@+id/addVolumeFragment"
+        android:name="com.example.nancost.fragments.add.AddVolumeFragment"
+        android:label="Thêm khối lượng"
+        tools:layout="@layout/fragment_add_volume" >
+        <action
+            android:id="@+id/action_addVolumeFragment_to_listFragment"
+            app:destination="@id/listFragment" />
+        <action
+            android:id="@+id/action_addVolumeFragment_to_dateUpdateFragment"
+            app:destination="@id/dateUpdateFragment" />
+        <argument
+            android:name="currentNancost"
+            app:argType="com.example.nancost.model.Nancost"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="nancostVolume"
+            app:argType="com.example.nancost.model.NancostVolume"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+    </fragment>
+
     <fragment
         android:id="@+id/dateAddFragment"
         android:name="com.example.nancost.fragments.update.DateAddFragment"
