@@ -4,6 +4,7 @@
     <string name="str_login">Đăng nhập</string>
     <string name="str_login_notice_msg">Vui lòng nhập tên đăng nhập và mật khẩu</string>
     <string name="str_register_notice_msg">Vui lòng nhập đầy đủ các trường</string>
+    <string name="str_warning_volume">Khối lượng đã giao vừa nhập lớn hơn khối lượng còn lại</string>
     <string name="str_save_login">Lưu đăng nhập</string>
     <string name="str_register">Đăng ký</string>
     <string name="str_empty_field">Hãy nhập đủ tên đăng nhập và mật khẩu</string>
@@ -31,9 +32,8 @@
     <string name="str_total_received_volume">Tổng khối lượng nhận về (kg)</string>
     <string name="str_amount_paid">Số tiền đã trả (đ)</string>
     <string name="str_total_amout_will_pay">Tổng tiền phải trả (đ)</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="str_yes">Có</string>
     <string name="str_no">Không</string>
     <string name="str_new_price">Giá cót mới</string>
+    <string name="str_nancost_paid">Trả nan thừa, nan xấu</string>
 </resources>

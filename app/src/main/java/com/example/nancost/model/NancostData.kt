@@ -24,10 +24,13 @@ data class NancostData(
     var unitPrice: Int? = 8000,
 
     @SerializedName("amount_will_pay")
-    var amountWillPay: Int? = null,
+    var amountWillPay: Int? = 0,
 
     @SerializedName("amount_paid")
-    var amountPaid: Int? = null,
+    var amountPaid: Int? = 0,
+
+    @SerializedName("check_nancost_paid")
+    var checkNancostPaid: Boolean? = false,
 
     @SuppressLint("SimpleDateFormat") @SerializedName("day_added")
     var dayAdded: String? = SimpleDateFormat("dd/MM/yyyy").format(Date())
@@ -40,6 +43,7 @@ data class NancostData(
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
         parcel.readValue(Int::class.java.classLoader) as? Int,
+        parcel.readBoolean(),
         parcel.readString(),
     )
 

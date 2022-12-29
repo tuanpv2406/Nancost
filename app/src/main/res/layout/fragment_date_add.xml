@@ -75,6 +75,63 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_unit_price"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/str_unit_price"
+                android:enabled="false"
+                android:layout_marginTop="@dimen/dp_16"
+                app:layout_constraintTop_toBottomOf="@+id/layout_delivered_volume"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/unit_price_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_amount_pay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/str_amout_pay"
+                android:enabled="false"
+                android:layout_marginTop="@dimen/dp_16"
+                app:layout_constraintTop_toBottomOf="@+id/layout_unit_price"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amount_pay_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_amount_paid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/str_amount_paid"
+                android:layout_marginTop="@dimen/dp_16"
+                app:layout_constraintTop_toBottomOf="@+id/layout_amount_pay"
+                app:layout_constraintStart_toStartOf="parent"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/amount_paid_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <TextView
                 android:id="@+id/tv_error"
                 android:layout_width="wrap_content"
@@ -84,21 +141,32 @@
                 android:lineSpacingExtra="@dimen/sp_12"
                 android:textColor="@color/red"
                 android:visibility="invisible"
-                app:layout_constraintTop_toBottomOf="@id/layout_delivered_volume"
+                app:layout_constraintTop_toBottomOf="@id/layout_amount_paid"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:textSize="@dimen/sp_12" />
 
+            <CheckBox
+                android:id="@+id/check_nancost_paid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:textSize="@dimen/sp_16"
+                android:buttonTint="@color/main_green"
+                app:layout_constraintTop_toBottomOf="@id/layout_amount_paid"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/str_nancost_paid" />
+
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_add"
-                app:layout_constraintTop_toBottomOf="@id/tv_error"
+                app:layout_constraintTop_toBottomOf="@id/check_nancost_paid"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_width="@dimen/dp_192"
                 android:layout_height="@dimen/dp_55"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/dp_10"
                 android:backgroundTint="@color/main_green"
                 android:clickable="false"
                 android:gravity="center"
