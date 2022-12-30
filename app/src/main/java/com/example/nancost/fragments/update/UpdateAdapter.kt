@@ -12,6 +12,7 @@ import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.NancostData
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import java.math.RoundingMode
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -94,7 +95,9 @@ class UpdateAdapter : RecyclerView.Adapter<UpdateAdapter.MyViewHolder>() {
                 Firebase.database.getReference("$userUid/nancost/")
                     .child("${nancostList[position]?.nancostUid}")
                     .child("remainVolume")
-                    .setValue(nancostList[position]?.deliveredVolume?.let { remainVolume?.plus(it) })
+                    .setValue(nancostList[position]?.deliveredVolume?.let {
+                        (remainVolume?.plus(it))?.toBigDecimal()?.setScale(2, RoundingMode.HALF_UP)?.toDouble()
+                    })
 
                 nancostDataList.removeAt(position)
                 nancostList = nancostDataList

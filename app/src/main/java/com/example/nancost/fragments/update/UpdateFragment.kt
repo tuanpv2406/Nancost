@@ -88,12 +88,12 @@ class UpdateFragment : Fragment() {
             })
         binding.unitPriceContent.setText(StringUtils.formatCurrency(args.currentNancost?.unitPrice ?: 0))
         binding.amountPayContent.setText(StringUtils.formatCurrency(args.currentNancost?.amountWillPay?: 0))
-        binding.amountPaidContent.setText(StringUtils.formatCurrency((args.currentNancost?.amountPaid ?: 0)))
+        binding.amountPaidContent.setText(args.currentNancost?.amountPaid.toString())
         binding.checkNancostPaid.isChecked = args.currentNancost?.checkNancostPaid == true
     }
 
     private fun updateItem() {
-        val amountPaidContent = StringUtils.currencyToString(binding.amountPaidContent.text.toString())
+        val amountPaidContent = binding.amountPaidContent.text.toString()
 
         val nancostData = NancostData(
             nancostDataUid = args.currentNancost?.nancostDataUid,

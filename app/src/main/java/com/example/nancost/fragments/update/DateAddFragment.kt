@@ -26,6 +26,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -134,7 +135,7 @@ class DateAddFragment : Fragment() {
         val nancost = Nancost(
             nancostUid = args.currentNancost?.nancostUid,
             nancostName = args.currentNancost?.nancostName,
-            remainVolume = args.currentNancost?.remainVolume?.minus(deliveredVolume),
+            remainVolume = (args.currentNancost?.remainVolume?.minus(deliveredVolume))?.toBigDecimal()?.setScale(2, RoundingMode.HALF_UP)?.toDouble(),
             nancostDataList = nancostDataList
         )
 

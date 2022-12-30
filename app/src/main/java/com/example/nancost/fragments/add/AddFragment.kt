@@ -1,8 +1,6 @@
 package com.example.nancost.fragments.add
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +9,19 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.nancost.MainActivity
 import com.example.nancost.R
 import com.example.nancost.databinding.FragmentAddBinding
 import com.example.nancost.fragments.dialog.ActionDialog
 import com.example.nancost.model.Nancost
-import com.example.nancost.model.NancostData
 import com.example.nancost.model.NancostVolume
 import com.example.nancost.model.VolumeList
 import com.example.nancost.utils.AppConstant
 import com.example.nancost.utils.SharedPreUtils
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -34,7 +30,6 @@ class AddFragment : Fragment() {
 
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
-    private var nancostDataList: ArrayList<NancostData?>? = arrayListOf()
     private var newPrice: Int? = 0
     private var volumeList: ArrayList<VolumeList?>? = arrayListOf()
 
@@ -89,10 +84,10 @@ class AddFragment : Fragment() {
         val nancost = Nancost(
             nancostUid = nancostUid,
             nancostName = nameContent,
-            remainVolume = receivedVolumeContent.toDouble()
+            remainVolume = receivedVolumeContent.toDouble().toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
         )
         val volume = VolumeList(
-            receivedVolume = receivedVolumeContent.toDouble()
+            receivedVolume = receivedVolumeContent.toDouble().toBigDecimal().setScale(2, RoundingMode.HALF_UP).toDouble()
         )
         volumeList?.add(volume)
         val nancostVolume = NancostVolume(

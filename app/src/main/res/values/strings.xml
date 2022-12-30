@@ -36,6 +36,8 @@
     <string name="str_no">Không</string>
     <string name="str_new_price">Giá cót mới</string>
     <string name="str_nancost_paid">Trả nan thừa, nan xấu</string>
+    <string name="str_empty_list">Chưa có ai cả. Hãy thêm 1 người mới!</string>
+    <string name="str_empty_date">Chưa có bản ghi nào cả. Hãy thêm bản ghi mới!</string>
     <string-array name="str_array_spinner">
         <item>Tất cả</item>
         <item>Đã trả đủ tiền</item>

@@ -22,6 +22,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -85,7 +86,7 @@ class AddVolumeFragment : Fragment() {
         Firebase.database.getReference("$userUid/nancost/")
             .child("${args.currentNancost?.nancostUid}")
             .child("remainVolume")
-            .setValue(args.currentNancost?.remainVolume?.plus(receivedVolumeContent))
+            .setValue((args.currentNancost?.remainVolume?.plus(receivedVolumeContent))?.toBigDecimal()?.setScale(2, RoundingMode.HALF_UP)?.toDouble())
 
         Firebase.database.getReference("$userUid/nancostVolume/")
             .child("${args.currentNancost?.nancostUid}")
