@@ -103,6 +103,7 @@ class UpdateFragment : Fragment() {
             unitPrice = args.currentNancost?.unitPrice,
             amountWillPay = args.currentNancost?.amountWillPay,
             amountPaid = amountPaidContent.toInt(),
+            dayAdded = args.currentNancost?.dayAdded
         )
         nancostData.amountWillPay = nancostData.getAmountPay()
 

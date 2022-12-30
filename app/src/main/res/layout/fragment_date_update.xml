@@ -6,11 +6,43 @@
     android:layout_height="match_parent"
     tools:context=".fragments.update.DateUpdateFragment">
 
+    <RelativeLayout
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:layout_marginVertical="@dimen/dp_16"
+        android:layout_marginHorizontal="@dimen/dp_18"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="visible">
+
+        <Spinner
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tv_spinner_content"
+            android:popupBackground="@drawable/bg_border_background_f8f8f8_4"
+            android:background="@drawable/bg_search_view"
+            android:gravity="start|center_vertical"
+            android:dropDownVerticalOffset="@dimen/dp_54"
+            android:textSize="@dimen/sp_24" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:background="@color/transparent"
+            android:src="@drawable/ccp_down_arrow"
+            tools:ignore="ContentDescription" />
+    </RelativeLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/search_view"
+        android:layout_marginTop="@dimen/dp_80"
+        app:layout_constraintTop_toBottomOf="@id/spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5" >
 

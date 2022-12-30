@@ -36,4 +36,10 @@
     <string name="str_no">Không</string>
     <string name="str_new_price">Giá cót mới</string>
     <string name="str_nancost_paid">Trả nan thừa, nan xấu</string>
+    <string-array name="str_array_spinner">
+        <item>Tất cả</item>
+        <item>Đã trả đủ tiền</item>
+        <item>Chưa trả tiền</item>
+        <item>Còn nợ</item>
+    </string-array>
 </resources>
